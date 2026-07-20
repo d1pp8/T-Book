@@ -18,7 +18,7 @@ class ListingFilter(django_filters.FilterSet):
     bathrooms = django_filters.NumberFilter(field_name='bathrooms', lookup_expr='gte')
 
     # amenities = django_filters.
-    # beds = django_filters.NumberFilter(field_name='beds', lookup_expr='gte')
+    beds = django_filters.NumberFilter(field_name='beds', lookup_expr='gte')
 
     max_area = django_filters.NumberFilter(field_name='area', lookup_expr="lte")
     min_area = django_filters.NumberFilter(field_name='area', lookup_expr="gte")
