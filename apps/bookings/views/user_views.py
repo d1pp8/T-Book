@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import (
     ListCreateAPIView,
     RetrieveAPIView,
+    ListAPIView
 )
 
 from apps.bookings.mixins import BookingUserLookupMixin
@@ -18,7 +19,7 @@ from apps.bookings.serializers import (
 
 class BookingUserListCreateAPIView(ListCreateAPIView):
     def get_queryset(self):
-        return Booking.objects.with_details().for_guest(self.request.user)
+        return Booking.objects.with_details().for_guest(self.request.user).active()
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -49,3 +50,20 @@ class BookingUserUserCancelAPIView(APIView, BookingUserLookupMixin):
         booking = BookingService.cancel(booking)
         serializer = BookingUserDetailSerializer(booking)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class BookingOwnerListAllAPIView(ListAPIView):
+    serializer_class = BookingUserListSerializer
+    def get_queryset(self):
+        return Booking.objects.with_details().for_guest(self.request.user)
+
+
+class BookingUserListCompletedAPIView(ListAPIView):
+    serializer_class = BookingUserListSerializer
+    def get_queryset(self):
+        return Booking.objects.with_details().for_guest(self.request.user).completed()
+
+class BookingUserListCancelledOrRejectedAPIView(ListAPIView):
+    serializer_class = BookingUserListSerializer
+    def get_queryset(self):
+        return Booking.objects.with_details().for_guest(self.request.user).cancelled_rejected()
