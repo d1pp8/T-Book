@@ -1,0 +1,24 @@
+.env
+*.db
+*.sqlite3
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# IDE
+.idea/
+.vscode/
+
+# Media / uploads (user-generated content, not source)
+media/
+
+# OS
+.DS_Store
