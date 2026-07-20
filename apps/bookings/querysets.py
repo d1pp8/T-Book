@@ -5,11 +5,14 @@ class BookingQuerySet(models.QuerySet):
     def active(self):
         return self.filter(status__in=[BookingStatus.PENDING, BookingStatus.CONFIRMED,])
 
+    def pending(self):
+        return self.filter(status=BookingStatus.PENDING)
+
     def confirmed(self):
         return self.filter(status=BookingStatus.CONFIRMED)
 
-    def cancelled(self):
-        return self.filter(status=BookingStatus.CANCELLED)
+    def cancelled_rejected(self):
+        return self.filter(status__in=[BookingStatus.CANCELLED, BookingStatus.REJECTED])
 
     def completed(self):
         return self.filter(status=BookingStatus.COMPLETED)
