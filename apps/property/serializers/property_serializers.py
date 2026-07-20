@@ -37,14 +37,18 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
 
 class PropertyListSerializer(serializers.ModelSerializer):
     cover_image = serializers.SerializerMethodField()
+    # available_units = serializers.SerializerMethodField() For statistic ToDo
     class Meta:
         model = Property
         fields = [
             'uuid',
             'type',
             'title',
-            'city',
+            'status',
             'country',
+            'city',
+            'street',
+            'house_number',
             'rating',
             'cover_image'
         ]
@@ -54,6 +58,7 @@ class PropertyListSerializer(serializers.ModelSerializer):
         if image:
             return PropertyImageCoverSerializer(image, context=self.context).data
         return None
+
 
 
 
