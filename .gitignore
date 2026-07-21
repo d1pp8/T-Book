@@ -24,7 +24,6 @@ media/
 # OS
 .DS_Store
 
-*.yml
 
 .terraform/
 *.tfstate
@@ -39,3 +38,4 @@ override.tf.json
 *.tfplan
 crash.log
 crash.*.log
+
