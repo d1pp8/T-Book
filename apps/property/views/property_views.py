@@ -15,7 +15,38 @@ from apps.property.serializers.property_serializers import(
 
 from apps.property.models import Property
 
+from drf_spectacular.utils import (
+    extend_schema,
+    extend_schema_view,
+    OpenApiResponse,
+)
 
+
+@extend_schema_view(
+    get=extend_schema(
+        tags=['Properties'],
+        summary="List properties",
+        description="Returns all properties owned by the authenticated user.",
+        responses=PropertyListSerializer(many=True),
+    ),
+    post=extend_schema(
+        tags=['Properties'],
+        summary="Create property",
+        description="""
+    Creates a new property.
+    
+    Requirements:
+    
+    - the user must be authenticated;
+    - all required property fields must be provided.
+    """,
+        request=PropertyCreateSerializer,
+        responses={
+            201: PropertyDetailSerializer,
+            400: OpenApiResponse(description="Validation error"),
+        },
+    ),
+    )
 class PropertyListCreateAPIView(ListCreateAPIView):
     def get_queryset(self):
         return Property.objects.filter(owner=self.request.user)
@@ -35,6 +66,37 @@ class PropertyListCreateAPIView(ListCreateAPIView):
         return Response(output.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
+@extend_schema_view(
+    get=extend_schema(
+        tags=['Properties'],
+        summary="Property details",
+        description="Returns detailed information about one of the authenticated user's properties.",
+        responses=PropertyDetailSerializer,
+    ),
+    put=extend_schema(
+        tags=['Properties'],
+        summary="Replace property",
+        description="Replaces all editable property information.",
+        request=PropertyUpdateSerializer,
+        responses=PropertyDetailSerializer,
+    ),
+    patch=extend_schema(
+        tags=['Properties'],
+        summary="Update property",
+        description="Updates one or more editable property fields.",
+        request=PropertyUpdateSerializer,
+        responses=PropertyDetailSerializer,
+    ),
+    delete=extend_schema(
+        tags=['Properties'],
+        summary="Delete property",
+        description="Deletes a property owned by the authenticated user.",
+        responses={
+            204: OpenApiResponse(description="Property deleted successfully."),
+            404: OpenApiResponse(description="Property not found."),
+        },
+    ),
+)
 class PropertyRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     lookup_field = 'uuid'
     lookup_url_kwarg = 'property_uuid'
