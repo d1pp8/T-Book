@@ -15,14 +15,8 @@ class AmenityAdminForm(forms.ModelForm):
 @admin.register(Amenity)
 class AmenityAdmin(admin.ModelAdmin):
     form = AmenityAdminForm
-    list_display = ('title', 'icon_preview',)
+    list_display = ('title',)
     search_fields = ('title',)
-
-    def icon_preview(self, obj):
-        icon = getattr(obj, "icon", None)
-        if icon:
-            return format_html('<img src="{}" style="height:24px" />', icon.media.file.url)
-        return "—"
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
@@ -54,6 +48,7 @@ class PropertyAdmin(admin.ModelAdmin):
         'country',
         'rating',
         'created_at',
+        'is_deleted'
     )
     list_filter = ('type', 'status', 'country', 'city',)
     search_fields = (
@@ -69,6 +64,12 @@ class PropertyAdmin(admin.ModelAdmin):
     readonly_fields = ('uuid', 'rating', 'created_at', 'updated_at',)
     ordering = ('-created_at',)
 
+    def get_queryset(self, request):
+        return Property.all_objects.get_queryset()
+
+    @admin.action(description="Restore selected items")
+    def restore_selected(self, request, queryset):
+        queryset.update(is_deleted=False, deleted_at=None)
 
 @admin.register(Unit)
 class UnitAdmin(admin.ModelAdmin):
@@ -81,7 +82,8 @@ class UnitAdmin(admin.ModelAdmin):
         'max_guests',
         'bedrooms',
         'bathrooms',
-        'room_number'
+        'room_number',
+        'is_deleted'
     )
     list_filter = ('status', 'property__type')
     search_fields = ('title', 'description', 'property__title', 'room_number')
@@ -89,7 +91,6 @@ class UnitAdmin(admin.ModelAdmin):
     filter_horizontal = ('amenities',)
     readonly_fields = ('uuid', 'created_at', 'updated_at',)
     ordering = ('property', 'room_number',)
-
 
 @admin.register(Bed)
 class BedAdmin(admin.ModelAdmin):
