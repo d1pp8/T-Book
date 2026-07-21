@@ -7,11 +7,9 @@ from apps.property.models import Unit
 from apps.bookings.models import Booking
 from apps.bookings.choices import BookingStatus
 from apps.bookings.validators import BookingsValidator
-
 from apps.bookings.exceptions import (
-
-    BookingStateConflict,
-    InvalidCancellation
+    InvalidCancellation,
+    BookingStateConflict
 )
 
 
