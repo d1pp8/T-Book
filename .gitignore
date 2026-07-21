@@ -19,7 +19,7 @@ wheels/
 .vscode/
 
 # Media / uploads (user-generated content, not source)
-media/
+/media/**
 
 # OS
 .DS_Store
