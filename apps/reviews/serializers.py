@@ -9,10 +9,19 @@ from apps.reviews.models import Review
 class ReviewCreateSerializer(serializers.Serializer):
     booking = serializers.SlugRelatedField(
         slug_field='uuid',
-        queryset=Booking.objects.all()
+        queryset=Booking.objects.all(),
+        help_text = 'UUID of the completed booking.'
     )
-    rating = serializers.IntegerField(min_value=1, max_value=10, required=False)
-    comment = serializers.CharField(required=False, allow_blank=True)
+    rating = serializers.IntegerField(
+        min_value=1,
+        max_value=10,
+        help_text='Rating from 1 to 10.'
+    )
+    comment = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        help_text='Optional review comment.'
+    )
 
 
 class ReviewUpdateSerializer(serializers.Serializer):
