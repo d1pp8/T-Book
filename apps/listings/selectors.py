@@ -41,13 +41,15 @@ class ListingSelector:
     @classmethod
     def get_detail(cls, property_uuid: UUID, search: ListingSearchParams, filters) -> ListingDetailDTO:
         data = cls._get_listing_data(property_uuid)
-        data.units = cls._apply_filters(queryset=data.units, filters=filters, search=search)
+        data.units = (cls._apply_filters(queryset=data.units, filters=filters, search=search)
+                            .prefetch_related('beds', 'amenities__icon__media', 'images__media'))
         if search.check_in and search.check_out:
             data.units = AvailabilityService.available_units(
                 queryset=data.units,
                 check_in=search.check_in,
                 check_out=search.check_out
             )
+        data.units = list(data.units)
         return cls._build_detail(data)
 
 
@@ -116,19 +118,15 @@ class ListingSelector:
     @classmethod
     def _get_listing_data(cls, property_uuid) -> ListingData:
         try:
-            property_obj = (Property.objects
-            .select_related('owner')
-            .prefetch_related(
-                'images__media',
-                'units',
-                'units__images__media',
-                'units__amenities',
-                'reviews__user',
-                'amenities',
-                'amenities__icon__media',
-                'units__amenities__icon__media',
-                'units__beds',
-            )
+            property_obj = (
+                Property.objects
+                .select_related('owner')
+                .prefetch_related(
+                    'images__media',
+                    'reviews__user',
+                    'amenities',
+                    'amenities__icon__media',
+                )
             .get(uuid=property_uuid, status=Property.Status.ACTIVE,))
         except Property.DoesNotExist:
             raise NotFound('Property not found.')
