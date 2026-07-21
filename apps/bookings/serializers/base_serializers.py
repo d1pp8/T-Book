@@ -8,12 +8,27 @@ from apps.property.serializers import UnitDetailSerializer
 
 
 class BookingCreateSerializer(serializers.Serializer):
-    unit = serializers.SlugRelatedField(slug_field="uuid", queryset=Unit.objects.all())
-    check_in = serializers.DateField()
-    check_out = serializers.DateField()
-    adults = serializers.IntegerField(min_value=1)
-    children = serializers.IntegerField(min_value=0)
-    special_request = serializers.CharField(required=False, allow_blank=True)
+    unit = serializers.SlugRelatedField(
+        slug_field='uuid',
+        queryset=Unit.objects.all(),
+        help_text='UUID of the unit to be booked.'
+    )
+    check_in = serializers.DateField(help_text='Check-in date in YYYY-MM-DD format.')
+    check_out = serializers.DateField(help_text='Check-out date in YYYY-MM-DD format.')
+    adults = serializers.IntegerField(
+        min_value=1,
+        help_text='Number of adult guests.'
+    )
+    children = serializers.IntegerField(
+        min_value=0,
+        help_text='Number of child guests.'
+    )
+    special_request = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        help_text='Optional message for the property owner.'
+    )
+
 
 
 class BookingListSerializer(serializers.ModelSerializer):
@@ -58,8 +73,8 @@ class BookingPropertySerializer(serializers.ModelSerializer):
 class BookingDetailSerializer(serializers.ModelSerializer):
     unit = UnitDetailSerializer(read_only=True)
     property = BookingPropertySerializer(source='unit.property', read_only=True)
-    duration = serializers.SerializerMethodField()
-    can_cancel = serializers.SerializerMethodField()
+    duration = serializers.SerializerMethodField(help_text='Booking duration in nights.')
+    can_cancel = serializers.SerializerMethodField(help_text='Indicates whether the booking can still be cancelled.')
 
     class Meta:
         model = Booking
