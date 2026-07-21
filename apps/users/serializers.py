@@ -90,3 +90,13 @@ class ChangePasswordSerializer(serializers.Serializer):
                 {'password': "Password field didn't match."}
             )
         return attrs
+
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+
+class LoginResponseSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
+    access = serializers.CharField()
+    user = UserSerializer()
