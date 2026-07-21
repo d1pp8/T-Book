@@ -1,0 +1,2 @@
+from apps.media.services.media_services.media_service import MediaService
+from apps.media.services.media_services.avatar_service import UserAvatarService
