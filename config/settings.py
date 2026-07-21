@@ -94,12 +94,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 if env.bool('USE_REMOTE'):
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': env.str('NAME'),
-            'USER': env.str('USER'),
-            'PASSWORD': env.str('PASSWORD'),
-            'HOST': env.str('HOST'),
-            'PORT': env.int('PORT'),
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': env.str('POSTGRES_DB'),
+            'USER': env.str('POSTGRES_USER'),
+            'PASSWORD': env.str('POSTGRES_PASSWORD'),
+            'HOST': env.str('DB_HOST'),
+            'PORT': env.int('DB_PORT'),
         }
     }
 
@@ -135,6 +135,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
