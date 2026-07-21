@@ -11,3 +11,7 @@ class BedSerializer(serializers.ModelSerializer):
             'quantity'
         ]
         read_only_fields = ['uuid']
+
+class ChoiceSerializer(serializers.Serializer):
+    value = serializers.CharField(help_text="Internal value.")
+    label = serializers.CharField(help_text="Human-readable label.")
