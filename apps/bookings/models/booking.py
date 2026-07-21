@@ -23,7 +23,7 @@ class Booking(UUIDModel, TimeStampedModel, SoftDeleteModel):
 
     unit = models.ForeignKey(
         Unit,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name='bookings'
     )
     check_in = models.DateField()
