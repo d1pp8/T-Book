@@ -3,6 +3,9 @@ from apps.common.models import TimeStampedModel, SoftDeleteModel, UUIDModel
 from apps.common.mixins import MediaOwnerMixin
 from django.core.validators import MaxValueValidator
 
+from apps.bookings.choices import BookingStatus
+from apps.property.exceptions import UnitHasActiveBookings
+
 from apps.property.models.property import Property
 
 class Unit(MediaOwnerMixin, TimeStampedModel, SoftDeleteModel, UUIDModel):
@@ -51,5 +54,17 @@ class Unit(MediaOwnerMixin, TimeStampedModel, SoftDeleteModel, UUIDModel):
                 name='unique_room_number_per_property'
             )
         ]
+
+    def delete(self, *args, **kwargs):
+        from apps.bookings.models import Booking
+
+        has_active = Booking.objects.filter(
+            unit=self,
+            status__in=[BookingStatus.PENDING, BookingStatus.CONFIRMED],
+        ).exists()
+        if has_active:
+            raise UnitHasActiveBookings("The unit cannot be deleted — there are active bookings.")
+        return super().delete(*args, **kwargs)
+
     def __str__(self):
         return self.title or f"Unit {self.uuid}"
