@@ -66,7 +66,7 @@ class UnitListSerializer(serializers.ModelSerializer, ContentSourceMixin):
     title = serializers.SerializerMethodField()
     description = serializers.SerializerMethodField()
     cover_image =   serializers.SerializerMethodField()
-
+    beds = BedSerializer(many=True, required=False)
     class Meta:
         model = Unit
         fields = [
@@ -78,6 +78,7 @@ class UnitListSerializer(serializers.ModelSerializer, ContentSourceMixin):
             'amenities',
             'max_guests',
             'cover_image',
+            'beds'
         ]
 
     def get_cover_image(self, obj):
