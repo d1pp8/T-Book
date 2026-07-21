@@ -1,4 +1,5 @@
 .env
+.env.docker
 *.db
 *.sqlite3
 
@@ -22,3 +23,19 @@ media/
 
 # OS
 .DS_Store
+
+*.yml
+
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+*.tfplan
+crash.log
+crash.*.log
