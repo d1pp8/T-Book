@@ -52,8 +52,9 @@ class RoomCategorySerializer(serializers.Serializer):
     area_to = serializers.IntegerField(min_value=5)
     guests_from = serializers.IntegerField(min_value=1)
     guests_to = serializers.IntegerField(min_value=1)
-    units_available = serializers.IntegerField()
     beds = BedSerializer(many=True)
+    units_available = serializers.IntegerField()
+
 
 
 class ReviewSerializer(serializers.Serializer):
@@ -90,8 +91,9 @@ class ListingDetailSerializer(serializers.Serializer):
     bedrooms = serializers.IntegerField(allow_null=True)
     bathrooms = serializers.IntegerField(allow_null=True)
     max_guests = serializers.IntegerField(allow_null=True)
-    categories = RoomCategorySerializer(many=True)
     beds = BedSerializer(many=True, allow_null=True)
+    categories = RoomCategorySerializer(many=True)
+
 
 
 
