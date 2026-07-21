@@ -2,8 +2,8 @@ from django.urls import path
 
 from apps.bookings.views.user_views import (
     BookingUserListCreateAPIView,
-    BookingUserUserDetailAPIView,
-    BookingUserUserCancelAPIView,
+    BookingUserDetailAPIView,
+    BookingUserCancelAPIView,
 
     BookingOwnerListAllAPIView,
     BookingUserListCompletedAPIView,
@@ -20,6 +20,6 @@ urlpatterns = [
     path('completed/', BookingUserListCompletedAPIView.as_view(), name='booking-user-list-completed'),
     path('all/', BookingOwnerListAllAPIView.as_view(), name='booking-user-list-all'),
 
-    path('<uuid:booking_uuid>/', BookingUserUserDetailAPIView.as_view(), name='booking-user-detail'),
-    path('<uuid:booking_uuid>/cancel/', BookingUserUserCancelAPIView.as_view(), name='booking-user-cancel'),
+    path('<uuid:booking_uuid>/', BookingUserDetailAPIView.as_view(), name='booking-user-detail'),
+    path('<uuid:booking_uuid>/cancel/', BookingUserCancelAPIView.as_view(), name='booking-user-cancel'),
 ]
