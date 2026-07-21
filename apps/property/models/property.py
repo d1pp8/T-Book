@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-
 from apps.common.models import (
     SoftDeleteModel,
     TimeStampedModel,
@@ -8,8 +7,11 @@ from apps.common.models import (
 )
 from apps.common.mixins import MediaOwnerMixin
 
-class Property(MediaOwnerMixin, TimeStampedModel, SoftDeleteModel, UUIDModel):
+from apps.bookings.choices import BookingStatus
+from apps.property.exceptions import PropertyHasActiveBookings
 
+
+class Property(MediaOwnerMixin, TimeStampedModel, SoftDeleteModel, UUIDModel):
     class Type(models.TextChoices):
         HOTEL = 'hotel', 'Hotel'
         HOSTEL = 'hostel', 'Hostel'
@@ -87,6 +89,17 @@ class Property(MediaOwnerMixin, TimeStampedModel, SoftDeleteModel, UUIDModel):
             self.Type.APARTMENT,
             self.Type.HOUSE
         )
+
+    def delete(self, *args, **kwargs):
+        from apps.bookings.models import Booking
+        has_active = (Booking.objects.filter(
+            unit__property=self,
+            status__in=[BookingStatus.PENDING, BookingStatus.CONFIRMED])
+                      .exists())
+        if has_active:
+            raise PropertyHasActiveBookings("The object cannot be deleted — there are active bookings.")
+        return super().delete(*args, **kwargs)
+
 
     def __str__(self):
         return self.title
