@@ -1,6 +1,5 @@
 from pathlib import Path
 from datetime import timedelta
-
 from environ import Env
 
 
@@ -13,6 +12,19 @@ env.read_env(BASE_DIR / '.env')
 SECRET_KEY = env.str('SECRET_KEY')
 
 DEBUG = env.bool('DEBUG')
+if not DEBUG:
+    SECURE_SSL_REDIRECT=True
+    SESSION_COOKIE_SECURE=True
+    CSRF_COOKIE_SECURE=True
+
+    SECURE_HSTS_SECONDS=30000000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS=True
+    SECURE_HSTS_PRELOAD=True
+
+    SECURE_CONTENT_TYPE_NOSNIFF=True
+    X_FRAME_OPTIONS='DENY'
+
+
 
 ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(',')
 
@@ -33,19 +45,32 @@ INSTALLED_APPS = [
     'apps.media',
     'apps.listings',
     'apps.reviews',
-    'debug_toolbar',
+    'drf_spectacular',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    'https://t-booking-frontend.com',
+    'http://localhost:3000'
+]
+
+if DEBUG:
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware',]
+    INSTALLED_APPS += ['debug_toolbar']
+
+
+
 
 ROOT_URLCONF = 'config.urls'
 
@@ -105,27 +130,48 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 STATIC_URL = 'static/'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'apps.common.pagination.DefaultPagination',
+    'PAGE_SIZE': 25,
+    'DEFAULT_THROTTLE_CLASSES': [
+            'rest_framework.throttling.UserRateThrottle',
+            'rest_framework.throttling.AnonRateThrottle',
+        ],
+        'DEFAULT_THROTTLE_RATES': {
+            'user': '300/hour',
+            'anon': '20/min',
+        },
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "T-Book API",
+    "DESCRIPTION":
+    """
+    Booking platform REST API.
+    
+    Features:
+    
+    - JWT Authentication
+    - Property management
+    - Booking system
+    - Reviews
+    - Media uploads
+    """,
+        "VERSION": "1.0.0",
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer', ),
