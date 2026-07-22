@@ -15,6 +15,9 @@ from .serializers import (
 )
 from drf_spectacular.utils import extend_schema
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 @extend_schema(
     tags=['Listings'],

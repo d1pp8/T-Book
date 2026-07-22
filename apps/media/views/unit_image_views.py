@@ -11,7 +11,14 @@ from apps.media.serializers.gallery_serializers.unit_image_serializers import (
     UnitImageUploadSerializer,
     UnitImageOrderingSerializer
 )
-from drf_spectacular.utils import extend_schema, OpenApiResponse
+from drf_spectacular.utils import (
+    extend_schema,
+    OpenApiResponse
+)
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @extend_schema(

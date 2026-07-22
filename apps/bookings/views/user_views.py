@@ -22,6 +22,10 @@ from drf_spectacular.utils import (
     OpenApiResponse,
 )
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class BookingUserListCreateAPIView(ListCreateAPIView):
     def get_queryset(self):

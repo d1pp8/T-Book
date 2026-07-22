@@ -26,6 +26,10 @@ from drf_spectacular.utils import (
     OpenApiResponse,
 )
 
+import logging
+logger = logging.getLogger(__name__)
+
+
 class LoginThrottle(UserRateThrottle):
     rate = "5/min"
 

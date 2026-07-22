@@ -22,6 +22,9 @@ from drf_spectacular.utils import (
     OpenApiResponse,
 )
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 @extend_schema_view(
     get=extend_schema(

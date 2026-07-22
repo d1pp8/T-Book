@@ -20,6 +20,9 @@ from drf_spectacular.utils import (
     extend_schema,
     OpenApiResponse,
 )
+import logging
+
+logger = logging.getLogger(__name__)
 
 @extend_schema(
     tags=['Property owner Bookings'],
