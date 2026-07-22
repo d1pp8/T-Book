@@ -35,7 +35,6 @@ services:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
 
-
   frontend:
     build:
       context: ./tbook-frontend
