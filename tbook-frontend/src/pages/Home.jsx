@@ -98,7 +98,7 @@ export default function Home() {
                   <div className="listing-card-loc">{item.city}, {item.country}</div>
                   <div className="listing-card-foot">
                     <div>
-                      <div className="price">от {item.price_from} ₽</div>
+                      <div className="price">от {item.price_from} €</div>
                       <div className="price-label">за ночь</div>
                     </div>
                     <div className="rating">★ {item.rating} ({item.review_count})</div>

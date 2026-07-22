@@ -74,7 +74,7 @@ export default function GuestBookings() {
               <div className="row-main">
                 <span className="row-title">{b.property_title}{b.unit_title ? ` — ${b.unit_title}` : ''}</span>
                 <span className="row-meta">
-                  {b.check_in} → {b.check_out} · {b.number_of_guests} гостей · {b.total_price} ₽
+                  {b.check_in} → {b.check_out} · {b.number_of_guests} гостей · {b.total_price} €
                 </span>
               </div>
               <div className="row-actions">

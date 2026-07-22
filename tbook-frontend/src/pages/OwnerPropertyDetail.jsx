@@ -349,7 +349,7 @@ export default function OwnerPropertyDetail() {
                 <Link key={u.uuid} to={`/owner/properties/${propertyUuid}/units/${u.uuid}`} className="row-item" style={{ textDecoration: 'none', color: 'inherit' }}>
                   <div className="row-main">
                     <span className="row-title">{u.title || 'Без названия'}</span>
-                    <span className="row-meta">{u.price_per_night} ₽/ночь · до {u.max_guests} гостей · {u.area} м²</span>
+                    <span className="row-meta">{u.price_per_night} €/ночь · до {u.max_guests} гостей · {u.area} м²</span>
                   </div>
                 </Link>
               ))}

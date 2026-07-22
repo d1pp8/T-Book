@@ -80,7 +80,7 @@ export default function OwnerBookings() {
               <div className="row-main">
                 <span className="row-title">{b.property_title}{b.unit_title ? ` — ${b.unit_title}` : ''}</span>
                 <span className="row-meta">
-                  {b.user?.full_name || b.user?.email} · {b.check_in} → {b.check_out} · {b.number_of_guests} гостей · {b.total_price} ₽
+                  {b.user?.full_name || b.user?.email} · {b.check_in} → {b.check_out} · {b.number_of_guests} гостей · {b.total_price} €
                 </span>
               </div>
               <div className="row-actions">

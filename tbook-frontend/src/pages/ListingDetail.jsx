@@ -119,7 +119,7 @@ export default function ListingDetail() {
                       </span>
                     </div>
                     <div className="row-actions">
-                      <span className="price">{cat.price_from}–{cat.price_to} ₽/ночь</span>
+                      <span className="price">{cat.price_from}–{cat.price_to} €/ночь</span>
                       <input
                         type="radio"
                         name="unit"
