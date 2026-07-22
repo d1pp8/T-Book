@@ -7,8 +7,8 @@ from .models import User
 class CustomUserAdmin(UserAdmin):
 
     model = User
-    ordering = ('email',) 
-    
+    ordering = ('email',)
+
     list_display = (
         'email',
         'first_name',
@@ -52,7 +52,7 @@ class CustomUserAdmin(UserAdmin):
 
 
     add_fieldsets = (
-        (None, 
+        (None,
          {
             'classes': ('wide',),
             'fields': (
@@ -65,3 +65,4 @@ class CustomUserAdmin(UserAdmin):
         },
         ),
     )
+
