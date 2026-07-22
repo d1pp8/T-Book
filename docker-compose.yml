@@ -36,6 +36,16 @@ services:
       - media_volume:/app/media
 
 
+  frontend:
+    build:
+      context: ./tbook-frontend
+      args:
+        VITE_API_BASE_URL: /api/v1
+    container_name: tbook_frontend
+    volumes:
+      - frontend_volume:/frontend
+
+
   nginx:
     image: nginx:alpine
     container_name: tbook_nginx
@@ -46,11 +56,14 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - static_volume:/app/staticfiles
       - media_volume:/app/media
+      - frontend_volume:/app/frontend
       - certbot_www:/var/www/certbot
       - certbot_conf:/etc/letsencrypt
 
     depends_on:
       web:
+        condition: service_started
+      frontend:
         condition: service_started
 
   certbot:
@@ -64,5 +77,6 @@ volumes:
   postgres_data:
   static_volume:
   media_volume:
+  frontend_volume:
   certbot_www:
   certbot_conf:

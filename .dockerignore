@@ -20,3 +20,8 @@ staticfiles
 htmlcov
 
 *.log
+
+node_modules
+dist
+.env.local
+
