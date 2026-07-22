@@ -8,6 +8,14 @@
 **REST API for a hotel/apartment booking platform.**
 Built with Django + Django REST Framework. Supports property & unit management, JWT authentication, bookings with an owner/guest workflow, reviews and media (image) uploads.
 
+## Live Demo
+
+🌐 **Production:** https://t-book.duckdns.org/
+
+📖 **Swagger UI:** https://t-book.duckdns.org/api/schema/swagger-ui/
+
+📄 **ReDoc:** https://t-book.duckdns.org/api/schema/redoc/
+
 ---
 
 ## 1. Project Overview
