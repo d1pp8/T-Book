@@ -11,7 +11,8 @@ from apps.bookings.views.user_views import (
 
 )
 
-app_name = 'bookings'
+app_name = 'bookings-user'
+
 
 urlpatterns = [
     path('', BookingUserListCreateAPIView.as_view(), name='booking-user-list-active-create'),

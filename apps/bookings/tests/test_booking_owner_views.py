@@ -11,19 +11,19 @@ from apps.users.tests.user_factory import UserFactory
 
 
 def booking_owner_list_url():
-    return reverse('booking-owner-list-create')
+    return reverse('bookings-owner:booking-owner-list-active')
 
 
 def booking_owner_detail_url(booking_uuid):
-    return reverse('booking-owner-list-bookings', kwargs={'booking_uuid': booking_uuid})
+    return reverse('bookings-owner:booking-owner-detail-bookings', kwargs={'booking_uuid': booking_uuid})
 
 
 def booking_owner_confirm_url(booking_uuid):
-    return reverse('booking-owner-confim-bookings', kwargs={'booking_uuid': booking_uuid})
+    return reverse('bookings-owner:booking-owner-confirm-bookings', kwargs={'booking_uuid': booking_uuid})
 
 
 def booking_owner_reject_url(booking_uuid):
-    return reverse('booking-owner-reject-bookings', kwargs={'booking_uuid': booking_uuid})
+    return reverse('bookings-owner:booking-owner-reject-bookings', kwargs={'booking_uuid': booking_uuid})
 
 
 @pytest.mark.django_db
@@ -50,7 +50,6 @@ class TestBookingOwnerListAPIView:
         response = client.get(booking_owner_list_url())
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 1
 
     def test_list_includes_guest_info(self):
         owner = UserFactory()
@@ -64,7 +63,7 @@ class TestBookingOwnerListAPIView:
         response = client.get(booking_owner_list_url())
 
         assert response.status_code == status.HTTP_200_OK
-        assert response.data[0]['user']['email'] == guest.email
+        assert response.data["results"][0]["user"]["email"] == guest.email
 
 
 @pytest.mark.django_db

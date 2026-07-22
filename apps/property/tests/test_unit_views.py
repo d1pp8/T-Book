@@ -50,7 +50,7 @@ class TestUnitListCreateAPIView:
         response = client.get(unit_list_url(prop.uuid))
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 2
+        assert len(response.data['results']) == 2
 
     def test_list_units_of_other_owners_property_returns_404(self):
         owner = UserFactory()
@@ -208,7 +208,7 @@ class TestCatalogViews:
         response = client.get(reverse('property:amenities-list'))
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 2
+        assert len(response.data['results']) == 2
 
     def test_bed_types_choices_is_public(self):
         client = APIClient()

@@ -39,7 +39,7 @@ def test_get_empty_review_list():
     response = client.get(url)
 
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.data) == 0
+    assert len(response.data['results']) == 0
 
 
 @pytest.mark.django_db
@@ -54,7 +54,7 @@ def test_get_only_own_reviews():
     response = client.get(url)
 
     assert response.status_code == 200
-    assert len(response.data) == 1
+    assert len(response.data['results']) == 1
 
 
 @pytest.mark.django_db

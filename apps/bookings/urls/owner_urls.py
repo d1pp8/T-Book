@@ -14,6 +14,8 @@ from apps.bookings.views.owner_views import (
     BookingOwnerRejectAPIView,
     BookingOwnerCompleteAPIView
 )
+app_name = 'bookings-owner'
+
 
 urlpatterns = [
 
@@ -27,7 +29,7 @@ urlpatterns = [
 
 
     path('<uuid:booking_uuid>/', BookingOwnerDetailAPIView.as_view(), name='booking-owner-detail-bookings'),
-    path('<uuid:booking_uuid>/confirm/', BookingOwnerConfirmAPIView.as_view(), name='booking-owner-confim-bookings'),
+    path('<uuid:booking_uuid>/confirm/', BookingOwnerConfirmAPIView.as_view(), name='booking-owner-confirm-bookings'),
     path('<uuid:booking_uuid>/reject/', BookingOwnerRejectAPIView.as_view(), name='booking-owner-reject-bookings'),
     path('<uuid:booking_uuid>/complete/', BookingOwnerCompleteAPIView.as_view(), name='booking-owner-complete-bookings'),
 ]

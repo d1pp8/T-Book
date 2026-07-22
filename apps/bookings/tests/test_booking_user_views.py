@@ -12,15 +12,15 @@ from apps.users.tests.user_factory import UserFactory
 
 
 def booking_list_url():
-    return reverse('bookings:booking-user-list-create')
+    return reverse('bookings-user:booking-user-list-active-create')
 
 
 def booking_detail_url(booking_uuid):
-    return reverse('bookings:booking-user-detail', kwargs={'booking_uuid': booking_uuid})
+    return reverse('bookings-user:booking-user-detail', kwargs={'booking_uuid': booking_uuid})
 
 
 def booking_cancel_url(booking_uuid):
-    return reverse('bookings:booking-user-cancel', kwargs={'booking_uuid': booking_uuid})
+    return reverse('bookings-user:booking-user-cancel', kwargs={'booking_uuid': booking_uuid})
 
 
 def build_booking_payload(unit, **overrides):
@@ -54,7 +54,7 @@ class TestBookingUserListCreateAPIView:
         response = client.get(booking_list_url())
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 1
+        assert len(response.data['results']) == 1
 
     def test_create_booking_success(self):
         user = UserFactory()

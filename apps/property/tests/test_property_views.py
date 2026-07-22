@@ -53,7 +53,7 @@ class TestPropertyListCreateAPIView:
         response = client.get(property_list_url())
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 1
+        assert len(response.data['results']) == 1
 
     def test_list_empty_for_new_owner(self):
         owner = UserFactory()
@@ -63,7 +63,7 @@ class TestPropertyListCreateAPIView:
         response = client.get(property_list_url())
 
         assert response.status_code == status.HTTP_200_OK
-        assert response.data == []
+        assert response.data['results'] == []
 
     def test_create_property_success(self):
         owner = UserFactory()

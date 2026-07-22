@@ -30,7 +30,7 @@ class TestListingListAPIView:
         response = client.get(listings_list_url())
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 1
+        assert len(response.data['results']) == 1
 
     def test_list_excludes_inactive_properties(self):
         active = PropertyFactory(status=Property.Status.ACTIVE)
@@ -43,7 +43,7 @@ class TestListingListAPIView:
         response = client.get(listings_list_url())
 
         assert response.status_code == status.HTTP_200_OK
-        returned_uuids = {item['uuid'] for item in response.data}
+        returned_uuids = {item['uuid'] for item in response.data['results']}
         assert str(active.uuid) in returned_uuids
         assert str(inactive.uuid) not in returned_uuids
 
@@ -55,7 +55,7 @@ class TestListingListAPIView:
         response = client.get(listings_list_url())
 
         assert response.status_code == status.HTTP_200_OK
-        returned_uuids = {item['uuid'] for item in response.data}
+        returned_uuids = {item['uuid'] for item in response.data['results']}
         assert str(prop.uuid) not in returned_uuids
 
     def test_list_filter_by_min_price(self):
@@ -69,7 +69,7 @@ class TestListingListAPIView:
         response = client.get(listings_list_url(), {'min_price': 200})
 
         assert response.status_code == status.HTTP_200_OK
-        returned_uuids = {item['uuid'] for item in response.data}
+        returned_uuids = {item['uuid'] for item in response.data['results']}
         assert str(prop_expensive.uuid) in returned_uuids
         assert str(prop_cheap.uuid) not in returned_uuids
 
@@ -84,7 +84,7 @@ class TestListingListAPIView:
         response = client.get(listings_list_url(), {'city': 'Berlin'})
 
         assert response.status_code == status.HTTP_200_OK
-        returned_uuids = {item['uuid'] for item in response.data}
+        returned_uuids = {item['uuid'] for item in response.data['results']}
         assert str(prop_berlin.uuid) in returned_uuids
         assert str(prop_paris.uuid) not in returned_uuids
 
