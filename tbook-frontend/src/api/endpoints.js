@@ -48,7 +48,7 @@ export const bookingApi = {
   completed: () => client.get('/bookings/completed/'),
   cancelledRejected: () => client.get('/bookings/cancelled-rejected/'),
   detail: (bookingUuid) => client.get(`/bookings/${bookingUuid}/`),
-  cancel: (bookingUuid) => client.post(`/bookings/${bookingUuid}/cancel/`),
+  cancel: (bookingUuid) => client.patch(`/bookings/${bookingUuid}/cancel/`),
 };
 
 /* ---------------- Bookings: owner side ---------------- */
@@ -60,9 +60,9 @@ export const ownerBookingApi = {
   cancelledRejected: () => client.get('/owner/bookings/cancelled-rejected/'),
   all: () => client.get('/owner/bookings/all/'),
   detail: (bookingUuid) => client.get(`/owner/bookings/${bookingUuid}/`),
-  confirm: (bookingUuid) => client.post(`/owner/bookings/${bookingUuid}/confirm/`),
-  reject: (bookingUuid) => client.post(`/owner/bookings/${bookingUuid}/reject/`),
-  complete: (bookingUuid) => client.post(`/owner/bookings/${bookingUuid}/complete/`),
+  confirm: (bookingUuid) => client.patch(`/owner/bookings/${bookingUuid}/confirm/`),
+  reject: (bookingUuid) => client.patch(`/owner/bookings/${bookingUuid}/reject/`),
+  complete: (bookingUuid) => client.patch(`/owner/bookings/${bookingUuid}/complete/`),
 };
 
 /* ---------------- Reviews ---------------- */
