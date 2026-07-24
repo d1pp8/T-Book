@@ -126,4 +126,3 @@ export function AmenityDotIcon({ size = 14, ...p }) {
     </svg>
   );
 }
-EOF
