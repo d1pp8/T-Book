@@ -11,6 +11,7 @@ import {
   UsersIcon,
   BedIcon,
   AreaIcon,
+  BathIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   StarIcon,
@@ -68,6 +69,7 @@ export default function ListingDetail() {
 
   const categories = listing?.categories || [];
   const activeUnit = categories[unitIndex];
+  const isSingleUnit = !categories.length && !!listing?.unit_uuid;
 
   useEffect(() => {
     setUnitImageIndex(0);
@@ -133,6 +135,7 @@ export default function ListingDetail() {
             <div className="rating-badge">
               <HeartRatingIcon size={14} />
               <span>{listing.rating}</span>
+              {listing.review_count != null && <span className="rating-badge-count">({listing.review_count})</span>}
             </div>
           </div>
           {heroGallery.length > 1 && (
@@ -200,6 +203,58 @@ export default function ListingDetail() {
       </div>
 
       <hr className="rule" />
+
+      {/* ---------- Single-unit facts (apartment / villa / house — no room categories) ---------- */}
+      {isSingleUnit && (
+        <>
+          <h2>Параметры жилья</h2>
+          <div className="unit-summary-row" style={{ marginBottom: 18 }}>
+            <div className="single-unit-facts">
+              {listing.area != null && (
+                <div className="unit-fact">
+                  <AreaIcon size={15} />
+                  <span>{listing.area} м²</span>
+                </div>
+              )}
+              {listing.bedrooms != null && (
+                <div className="unit-fact">
+                  <BedIcon size={15} />
+                  <span>{listing.bedrooms} спальни</span>
+                </div>
+              )}
+              {listing.bathrooms != null && (
+                <div className="unit-fact">
+                  <BathIcon size={15} />
+                  <span>{listing.bathrooms} санузла</span>
+                </div>
+              )}
+              {listing.max_guests != null && (
+                <div className="unit-fact">
+                  <UsersIcon size={15} />
+                  <span>до {listing.max_guests} гостей</span>
+                </div>
+              )}
+              {listing.beds?.length > 0 && (
+                <div className="unit-fact">
+                  <BedIcon size={15} />
+                  <span>{listing.beds.map((b) => `${b.type} ×${b.quantity}`).join(', ')}</span>
+                </div>
+              )}
+            </div>
+            <div className="unit-summary-actions">
+              {listing.price_per_night != null && (
+                <span className="price price-lg">
+                  {listing.price_per_night} €<span className="price-label"> / ночь</span>
+                </span>
+              )}
+              <a href="#book" className="btn btn-brass">
+                Забронировать
+              </a>
+            </div>
+          </div>
+          <hr className="rule" />
+        </>
+      )}
 
       {/* ---------- Room categories browser ---------- */}
       {categories.length > 0 && (

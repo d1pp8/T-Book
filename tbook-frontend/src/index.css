@@ -663,6 +663,10 @@ h3 {
   border-radius: 100px;
   box-shadow: var(--shadow);
 }
+.rating-badge-count {
+  color: var(--ink-soft);
+  font-weight: 500;
+}
 .hero-gallery-thumbs {
   display: flex;
   flex-direction: column;
@@ -949,6 +953,11 @@ h3 {
   gap: 20px;
   flex-wrap: wrap;
   margin-bottom: 8px;
+}
+.single-unit-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
 }
 .unit-summary-actions {
   display: flex;
