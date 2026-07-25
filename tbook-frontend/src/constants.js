@@ -39,6 +39,13 @@ export const BOOKING_STATUS_LABELS = {
   rejected: 'Отклонено',
 };
 
+export const SORT_OPTIONS = [
+  { value: '', label: 'По умолчанию' },
+  { value: 'price', label: 'Сначала дешёвые' },
+  { value: '-price', label: 'Сначала дорогие' },
+  { value: '-created', label: 'Сначала новые' },
+];
+
 export const ROLE_LABELS = {
   user: 'Гость',
   owner: 'Владелец',

@@ -84,9 +84,9 @@ export const propertyImageApi = {
     });
   },
   remove: (propertyUuid, imageUuid) => client.delete(`/media/${propertyUuid}/images/${imageUuid}/`),
-  setCover: (propertyUuid, imageUuid) => client.post(`/media/${propertyUuid}/images/${imageUuid}/cover/`),
-  setOrder: (propertyUuid, imageUuid, ordering) =>
-    client.post(`/media/${propertyUuid}/images/ordering/`, { uuid: imageUuid, ordering }),
+  setCover: (propertyUuid, imageUuid) => client.patch(`/media/${propertyUuid}/images/${imageUuid}/cover/`),
+  // API expects an array of { uuid, ordering } for the whole gallery, not a single item.
+  setOrder: (propertyUuid, items) => client.patch(`/media/${propertyUuid}/images/ordering/`, items),
 };
 
 /* ---------------- Media: unit images ---------------- */
@@ -101,7 +101,8 @@ export const unitImageApi = {
   remove: (propertyUuid, unitUuid, imageUuid) =>
     client.delete(`/media/${propertyUuid}/units/${unitUuid}/images/${imageUuid}/`),
   setCover: (propertyUuid, unitUuid, imageUuid) =>
-    client.post(`/media/${propertyUuid}/units/${unitUuid}/images/${imageUuid}/cover/`),
-  setOrder: (propertyUuid, unitUuid, imageUuid, ordering) =>
-    client.post(`/media/${propertyUuid}/units/${unitUuid}/images/ordering/`, { uuid: imageUuid, ordering }),
+    client.patch(`/media/${propertyUuid}/units/${unitUuid}/images/${imageUuid}/cover/`),
+  // API expects an array of { uuid, ordering } for the whole gallery, not a single item.
+  setOrder: (propertyUuid, unitUuid, items) =>
+    client.patch(`/media/${propertyUuid}/units/${unitUuid}/images/ordering/`, items),
 };

@@ -117,6 +117,27 @@ export function ThumbDownIcon({ size = 15, ...p }) {
   );
 }
 
+export function PencilIcon({ size = 14, ...p }) {
+  return (
+    <svg {...base(size)} {...p}>
+      <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19 3 20l1-4Z" />
+      <path d="M14.5 5.5l3 3" />
+    </svg>
+  );
+}
+
+export function TrashIcon({ size = 14, ...p }) {
+  return (
+    <svg {...base(size)} {...p}>
+      <path d="M4 6h16" />
+      <path d="M9 6V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V6" />
+      <path d="M6 6l1 14a1.5 1.5 0 0 0 1.5 1.4h7a1.5 1.5 0 0 0 1.5-1.4l1-14" />
+      <path d="M10 10.5v7" />
+      <path d="M14 10.5v7" />
+    </svg>
+  );
+}
+
 // Generic amenity glyph fallback (used when an amenity has no uploaded icon image).
 export function AmenityDotIcon({ size = 14, ...p }) {
   return (

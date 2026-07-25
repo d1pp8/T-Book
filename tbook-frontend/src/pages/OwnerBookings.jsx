@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ownerBookingApi } from '../api/endpoints';
 import { apiErrorMessage } from '../api/client';
 import { Spinner, Empty, ErrorBanner, SuccessBanner, StatusStamp, ConfirmButton } from '../components/Common';
+import BookingDetailModal from '../components/BookingDetail';
 import { BOOKING_STATUS_LABELS } from '../constants';
 
 const TABS = [
@@ -20,6 +21,7 @@ export default function OwnerBookings() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [busyUuid, setBusyUuid] = useState('');
+  const [detailTarget, setDetailTarget] = useState(null);
 
   const load = () => {
     setLoading(true);
@@ -85,6 +87,9 @@ export default function OwnerBookings() {
               </div>
               <div className="row-actions">
                 <StatusStamp status={b.status} labels={BOOKING_STATUS_LABELS} />
+                <button className="btn btn-secondary btn-sm" onClick={() => setDetailTarget(b.uuid)}>
+                  Подробнее
+                </button>
                 {b.status === 'pending' && (
                   <>
                     <button className="btn btn-brass btn-sm" disabled={busyUuid === b.uuid} onClick={() => act(ownerBookingApi.confirm, b.uuid, 'Бронирование подтверждено.')}>
@@ -102,6 +107,15 @@ export default function OwnerBookings() {
             </div>
           ))}
         </div>
+      )}
+
+      {detailTarget && (
+        <BookingDetailModal
+          title="Детали заявки"
+          loadDetail={() => ownerBookingApi.detail(detailTarget)}
+          onClose={() => setDetailTarget(null)}
+          isOwnerView
+        />
       )}
     </div>
   );
