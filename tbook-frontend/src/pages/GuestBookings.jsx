@@ -180,7 +180,7 @@ function MyReviewsSection() {
       {loading && <Spinner />}
 
       {!loading && items && items.length === 0 && (
-        <Empty title="No reviews yet" hint="Leave a review for a completed stay in the \"Bookings\" tab." />
+          <Empty title="No reviews yet" hint={'Leave a review for a completed stay in the "Bookings" tab.'} />
       )}
 
       {!loading && items && items.length > 0 && (
