@@ -27,7 +27,7 @@ export default function Register() {
       await register(form);
       navigate('/', { replace: true });
     } catch (err) {
-      setError(apiErrorMessage(err, 'Не удалось зарегистрироваться.'));
+      setError(apiErrorMessage(err, 'Failed to sign up.'));
     } finally {
       setBusy(false);
     }
@@ -35,22 +35,22 @@ export default function Register() {
 
   return (
     <div style={{ maxWidth: 440, margin: '0 auto' }}>
-      <p className="eyebrow">Регистрация</p>
-      <h1>Новый аккаунт</h1>
+      <p className="eyebrow">Sign Up</p>
+      <h1>New account</h1>
       <p className="subtitle">
-        Новые аккаунты получают роль «Гость». Чтобы размещать объекты, попросите администратора выдать роль
-        «Владелец».
+        New accounts get the "Guest" role. To list properties, ask an administrator to grant you
+        the "Owner" role.
       </p>
       <div className="card card-pad">
         <ErrorBanner message={error} />
         <form onSubmit={submit}>
           <div className="field-row">
             <div className="field">
-              <label>Имя</label>
+              <label>First name</label>
               <input value={form.first_name} onChange={set('first_name')} />
             </div>
             <div className="field">
-              <label>Фамилия</label>
+              <label>Last name</label>
               <input value={form.last_name} onChange={set('last_name')} />
             </div>
           </div>
@@ -60,21 +60,21 @@ export default function Register() {
           </div>
           <div className="field-row">
             <div className="field">
-              <label>Пароль</label>
+              <label>Password</label>
               <input type="password" required value={form.password} onChange={set('password')} />
             </div>
             <div className="field">
-              <label>Повторите пароль</label>
+              <label>Confirm password</label>
               <input type="password" required value={form.password2} onChange={set('password2')} />
             </div>
           </div>
           <button className="btn" style={{ width: '100%' }} disabled={busy}>
-            {busy ? 'Создаём…' : 'Зарегистрироваться'}
+            {busy ? 'Creating…' : 'Sign Up'}
           </button>
         </form>
       </div>
       <p className="field-hint" style={{ marginTop: 16 }}>
-        Уже есть аккаунт? <Link to="/login">Войти</Link>
+        Already have an account? <Link to="/login">Log In</Link>
       </p>
     </div>
   );

@@ -20,40 +20,40 @@ export default function Layout() {
           </NavLink>
           <div className="nav-links">
             <NavLink to="/" end className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
-              Каталог
+              Catalog
             </NavLink>
             {isAuthenticated && (
               <NavLink to="/bookings" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
-                Мои брони
+                My Bookings
               </NavLink>
             )}
             {isOwner && (
               <NavLink to="/owner/properties" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
-                Мои объекты
+                My Properties
               </NavLink>
             )}
             {isOwner && (
               <NavLink to="/owner/bookings" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
-                Заявки
+                Requests
               </NavLink>
             )}
             {isAuthenticated ? (
               <>
                 <NavLink to="/profile" className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
-                  Профиль
+                  Profile
                 </NavLink>
                 <span className="nav-role">{ROLE_LABELS[user?.role] || user?.role}</span>
                 <button className="btn btn-secondary btn-sm" onClick={handleLogout}>
-                  Выйти
+                  Log Out
                 </button>
               </>
             ) : (
               <>
                 <NavLink to="/login" className="nav-link">
-                  Войти
+                  Log In
                 </NavLink>
                 <NavLink to="/register" className="btn btn-sm">
-                  Регистрация
+                  Sign Up
                 </NavLink>
               </>
             )}

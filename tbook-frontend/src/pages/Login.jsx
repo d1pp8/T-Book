@@ -20,7 +20,7 @@ export default function Login() {
       await login(form.email, form.password);
       navigate(location.state?.from?.pathname || '/', { replace: true });
     } catch (err) {
-      setError(apiErrorMessage(err, 'Неверный email или пароль.'));
+      setError(apiErrorMessage(err, 'Incorrect email or password.'));
     } finally {
       setBusy(false);
     }
@@ -28,9 +28,9 @@ export default function Login() {
 
   return (
     <div style={{ maxWidth: 400, margin: '0 auto' }}>
-      <p className="eyebrow">Вход</p>
-      <h1>С возвращением</h1>
-      <p className="subtitle">Войдите, чтобы бронировать и управлять объектами.</p>
+      <p className="eyebrow">Log In</p>
+      <h1>Welcome back</h1>
+      <p className="subtitle">Log in to book and manage properties.</p>
       <div className="card card-pad">
         <ErrorBanner message={error} />
         <form onSubmit={submit}>
@@ -44,7 +44,7 @@ export default function Login() {
             />
           </div>
           <div className="field">
-            <label>Пароль</label>
+            <label>Password</label>
             <input
               type="password"
               required
@@ -53,12 +53,12 @@ export default function Login() {
             />
           </div>
           <button className="btn" style={{ width: '100%' }} disabled={busy}>
-            {busy ? 'Входим…' : 'Войти'}
+            {busy ? 'Logging in…' : 'Log In'}
           </button>
         </form>
       </div>
       <p className="field-hint" style={{ marginTop: 16 }}>
-        Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
+        Don't have an account? <Link to="/register">Sign up</Link>
       </p>
     </div>
   );

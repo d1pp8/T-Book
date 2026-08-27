@@ -60,10 +60,10 @@ export default function OwnerProperties() {
       await propertyApi.create(payload);
       setShowForm(false);
       setForm(emptyForm);
-      setNotice('Объект создан.');
+      setNotice('Property created.');
       load();
     } catch (err) {
-      setFormError(apiErrorMessage(err, 'Не удалось создать объект.'));
+      setFormError(apiErrorMessage(err, 'Failed to create the property.'));
     } finally {
       setBusy(false);
     }
@@ -71,13 +71,13 @@ export default function OwnerProperties() {
 
   return (
     <div>
-      <p className="eyebrow">Кабинет владельца</p>
-      <h1>Мои объекты</h1>
-      <p className="subtitle">Отели, апартаменты и дома, которыми вы управляете.</p>
+      <p className="eyebrow">Owner Dashboard</p>
+      <h1>My Properties</h1>
+      <p className="subtitle">Hotels, apartments and houses you manage.</p>
 
       <div className="btn-row" style={{ marginBottom: 24 }}>
         <button className="btn btn-brass" onClick={() => setShowForm((v) => !v)}>
-          {showForm ? 'Скрыть форму' : '+ Новый объект'}
+          {showForm ? 'Hide form' : '+ New Property'}
         </button>
       </div>
 
@@ -85,12 +85,12 @@ export default function OwnerProperties() {
 
       {showForm && (
         <div className="card card-pad" style={{ marginBottom: 32 }}>
-          <h3>Новый объект</h3>
+          <h3>New Property</h3>
           <ErrorBanner message={formError} />
           <form onSubmit={submit}>
             <div className="field-row">
               <div className="field">
-                <label>Тип</label>
+                <label>Type</label>
                 <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
                   {PROPERTY_TYPES.map((t) => (
                     <option key={t.value} value={t.value}>{t.label}</option>
@@ -98,7 +98,7 @@ export default function OwnerProperties() {
                 </select>
               </div>
               <div className="field">
-                <label>Статус</label>
+                <label>Status</label>
                 <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}>
                   {PROPERTY_STATUSES.map((s) => (
                     <option key={s.value} value={s.value}>{s.label}</option>
@@ -107,46 +107,46 @@ export default function OwnerProperties() {
               </div>
             </div>
             <div className="field">
-              <label>Название</label>
+              <label>Title</label>
               <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
             </div>
             <div className="field">
-              <label>Описание</label>
+              <label>Description</label>
               <textarea rows={3} required value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
             </div>
             <div className="field-row">
               <div className="field">
-                <label>Страна</label>
+                <label>Country</label>
                 <input required value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} />
               </div>
               <div className="field">
-                <label>Город</label>
+                <label>City</label>
                 <input required value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} />
               </div>
             </div>
             <div className="field-row">
               <div className="field">
-                <label>Улица</label>
+                <label>Street</label>
                 <input required value={form.street} onChange={(e) => setForm({ ...form, street: e.target.value })} />
               </div>
               <div className="field">
-                <label>Дом</label>
+                <label>House number</label>
                 <input required value={form.house_number} onChange={(e) => setForm({ ...form, house_number: e.target.value })} />
               </div>
             </div>
             <div className="field-row">
               <div className="field">
-                <label>Индекс</label>
+                <label>Postal code</label>
                 <input value={form.postal_code} onChange={(e) => setForm({ ...form, postal_code: e.target.value })} />
               </div>
               <div className="field">
-                <label>Этаж</label>
+                <label>Floor</label>
                 <input type="number" value={form.floor} onChange={(e) => setForm({ ...form, floor: e.target.value })} />
               </div>
             </div>
             {amenities.length > 0 && (
               <div className="field">
-                <label>Удобства</label>
+                <label>Amenities</label>
                 <div className="checkbox-grid">
                   {amenities.map((a) => (
                     <span key={a.uuid} className={`chip${form.amenities.includes(a.uuid) ? ' selected' : ''}`} onClick={() => toggleAmenity(a.uuid)}>
@@ -157,7 +157,7 @@ export default function OwnerProperties() {
               </div>
             )}
             <button className="btn" disabled={busy}>
-              {busy ? 'Создаём…' : 'Создать объект'}
+              {busy ? 'Creating…' : 'Create Property'}
             </button>
           </form>
         </div>
@@ -167,7 +167,7 @@ export default function OwnerProperties() {
       {loading && <Spinner />}
 
       {!loading && properties && properties.length === 0 && (
-        <Empty title="Объектов пока нет" hint="Создайте первый объект, чтобы начать принимать бронирования." />
+        <Empty title="No properties yet" hint="Create your first property to start accepting bookings." />
       )}
 
       {!loading && properties && properties.length > 0 && (
@@ -178,7 +178,7 @@ export default function OwnerProperties() {
                 <span className="row-title">{p.title}</span>
                 <span className="row-meta">{labelFor(PROPERTY_TYPES, p.type)} · {p.city}, {p.country} · ★ {p.rating}</span>
               </div>
-              <StatusStamp status={p.status} labels={{ active: 'Активен', inactive: 'Неактивен', under_renovation: 'На реконструкции' }} />
+              <StatusStamp status={p.status} labels={{ active: 'Active', inactive: 'Inactive', under_renovation: 'Under renovation' }} />
             </Link>
           ))}
         </div>

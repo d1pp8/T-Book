@@ -71,7 +71,7 @@ client.interceptors.response.use(
   }
 );
 
-export function apiErrorMessage(err, fallback = 'Что-то пошло не так. Попробуйте ещё раз.') {
+export function apiErrorMessage(err, fallback = 'Something went wrong. Please try again.') {
   const data = err?.response?.data;
   if (!data) return err?.message || fallback;
   if (typeof data === 'string') return data;

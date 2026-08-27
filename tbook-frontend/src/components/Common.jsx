@@ -37,13 +37,13 @@ export function Pagination({ page, hasNext, hasPrev, onChange }) {
   return (
     <div className="pagination">
       <button className="btn btn-secondary btn-sm" disabled={!hasPrev} onClick={() => onChange(page - 1)}>
-        ← Назад
+        ← Back
       </button>
       <span className="field-hint" style={{ alignSelf: 'center' }}>
-        стр. {page}
+        page {page}
       </span>
       <button className="btn btn-secondary btn-sm" disabled={!hasNext} onClick={() => onChange(page + 1)}>
-        Вперёд →
+        Next →
       </button>
     </div>
   );
@@ -60,7 +60,7 @@ export function Modal({ title, onClose, children }) {
   );
 }
 
-export function ConfirmButton({ label, confirmLabel = 'Точно?', onConfirm, className = 'btn btn-secondary btn-sm' }) {
+export function ConfirmButton({ label, confirmLabel = 'Sure?', onConfirm, className = 'btn btn-secondary btn-sm' }) {
   const [confirming, setConfirming] = useState(false);
   if (confirming) {
     return (
@@ -69,7 +69,7 @@ export function ConfirmButton({ label, confirmLabel = 'Точно?', onConfirm, 
           {confirmLabel}
         </button>
         <button className="btn btn-secondary btn-sm" onClick={() => setConfirming(false)}>
-          Отмена
+          Cancel
         </button>
       </span>
     );

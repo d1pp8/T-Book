@@ -46,7 +46,7 @@ export default function Home() {
         if (!cancelled) setData(data);
       })
       .catch((err) => {
-        if (!cancelled) setError(apiErrorMessage(err, 'Не удалось загрузить каталог.'));
+        if (!cancelled) setError(apiErrorMessage(err, 'Failed to load the catalog.'));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -76,34 +76,34 @@ export default function Home() {
 
   return (
     <div>
-      <p className="eyebrow">Каталог</p>
-      <h1>Найдите жильё для следующей поездки</h1>
-      <p className="subtitle">Отели, апартаменты и дома, доступные для бронирования прямо сейчас.</p>
+      <p className="eyebrow">Catalog</p>
+      <h1>Find a place to stay for your next trip</h1>
+      <p className="subtitle">Hotels, apartments and houses available to book right now.</p>
 
       <form className="card card-pad" onSubmit={submitSearch} style={{ marginBottom: 32 }}>
         <div className="field-row">
           <div className="field">
-            <label>Заезд</label>
+            <label>Check-in</label>
             <input type="date" value={search.check_in} onChange={set('check_in')} />
           </div>
           <div className="field">
-            <label>Выезд</label>
+            <label>Check-out</label>
             <input type="date" min={search.check_in || undefined} value={search.check_out} onChange={set('check_out')} />
           </div>
         </div>
         <div className="field-row">
           <div className="field">
-            <label>Взрослые</label>
+            <label>Adults</label>
             <input type="number" min="0" value={search.adults} onChange={set('adults')} />
           </div>
           <div className="field">
-            <label>Дети</label>
+            <label>Children</label>
             <input type="number" min="0" value={search.children} onChange={set('children')} />
           </div>
         </div>
         <div className="field">
-          <label>Поиск по названию/описанию</label>
-          <input value={search.search} onChange={set('search')} placeholder="Например: вилла у моря" />
+          <label>Search by title/description</label>
+          <input value={search.search} onChange={set('search')} placeholder="E.g.: villa by the sea" />
         </div>
 
         <button
@@ -112,53 +112,53 @@ export default function Home() {
           style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left', marginBottom: 12 }}
           onClick={() => setShowMore((v) => !v)}
         >
-          {showMore ? '▲ Скрыть дополнительные фильтры' : `▼ Дополнительные фильтры${activeExtraCount ? ` (${activeExtraCount})` : ''}`}
+          {showMore ? '▲ Hide extra filters' : `▼ Extra filters${activeExtraCount ? ` (${activeExtraCount})` : ''}`}
         </button>
 
         {showMore && (
           <>
             <div className="field-row">
               <div className="field">
-                <label>Тип жилья</label>
+                <label>Property type</label>
                 <select value={search.type} onChange={set('type')}>
-                  <option value="">Любой</option>
+                  <option value="">Any</option>
                   {PROPERTY_TYPES.map((t) => (
                     <option key={t.value} value={t.value}>{t.label}</option>
                   ))}
                 </select>
               </div>
               <div className="field">
-                <label>Город</label>
-                <input value={search.city} onChange={set('city')} placeholder="Например: Берлин" />
+                <label>City</label>
+                <input value={search.city} onChange={set('city')} placeholder="E.g.: Berlin" />
               </div>
             </div>
             <div className="field-row">
               <div className="field">
-                <label>Цена от, €/ночь</label>
+                <label>Price from, €/night</label>
                 <input type="number" min="0" value={search.min_price} onChange={set('min_price')} />
               </div>
               <div className="field">
-                <label>Цена до, €/ночь</label>
+                <label>Price to, €/night</label>
                 <input type="number" min="0" value={search.max_price} onChange={set('max_price')} />
               </div>
             </div>
             <div className="field-row">
               <div className="field">
-                <label>Спален от</label>
+                <label>Bedrooms from</label>
                 <input type="number" min="0" value={search.bedrooms} onChange={set('bedrooms')} />
               </div>
               <div className="field">
-                <label>Ванных от</label>
+                <label>Bathrooms from</label>
                 <input type="number" min="0" value={search.bathrooms} onChange={set('bathrooms')} />
               </div>
             </div>
             <div className="field-row">
               <div className="field">
-                <label>Рейтинг от</label>
+                <label>Rating from</label>
                 <input type="number" min="0" max="10" step="0.1" value={search.min_rating} onChange={set('min_rating')} />
               </div>
               <div className="field">
-                <label>Сортировка</label>
+                <label>Sort by</label>
                 <select value={search.ordering} onChange={set('ordering')}>
                   {SORT_OPTIONS.map((o) => (
                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -170,9 +170,9 @@ export default function Home() {
         )}
 
         <div className="btn-row">
-          <button className="btn btn-brass">Искать</button>
+          <button className="btn btn-brass">Search</button>
           <button type="button" className="btn btn-secondary" onClick={resetSearch}>
-            Сбросить
+            Reset
           </button>
         </div>
       </form>
@@ -181,7 +181,7 @@ export default function Home() {
       {loading && <Spinner />}
 
       {!loading && data && data.results.length === 0 && (
-        <Empty title="Ничего не найдено" hint="Попробуйте изменить даты, фильтры или количество гостей." />
+        <Empty title="Nothing found" hint="Try changing the dates, filters, or number of guests." />
       )}
 
       {!loading && data && data.results.length > 0 && (
@@ -200,8 +200,8 @@ export default function Home() {
                   <div className="listing-card-loc">{item.city}, {item.country}</div>
                   <div className="listing-card-foot">
                     <div>
-                      <div className="price">от {item.price_from} €</div>
-                      <div className="price-label">за ночь</div>
+                      <div className="price">from {item.price_from} €</div>
+                      <div className="price-label">per night</div>
                     </div>
                     <div className="rating">★ {item.rating} ({item.review_count})</div>
                   </div>

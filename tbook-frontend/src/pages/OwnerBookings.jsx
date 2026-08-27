@@ -6,12 +6,12 @@ import BookingDetailModal from '../components/BookingDetail';
 import { BOOKING_STATUS_LABELS } from '../constants';
 
 const TABS = [
-  { key: 'active', label: 'Активные', loader: ownerBookingApi.active },
-  { key: 'pending', label: 'Ожидают', loader: ownerBookingApi.pending },
-  { key: 'confirmed', label: 'Подтверждённые', loader: ownerBookingApi.confirmed },
-  { key: 'completed', label: 'Завершённые', loader: ownerBookingApi.completed },
-  { key: 'cancelled', label: 'Отменённые/отклонённые', loader: ownerBookingApi.cancelledRejected },
-  { key: 'all', label: 'Все', loader: ownerBookingApi.all },
+  { key: 'active', label: 'Active', loader: ownerBookingApi.active },
+  { key: 'pending', label: 'Pending', loader: ownerBookingApi.pending },
+  { key: 'confirmed', label: 'Confirmed', loader: ownerBookingApi.confirmed },
+  { key: 'completed', label: 'Completed', loader: ownerBookingApi.completed },
+  { key: 'cancelled', label: 'Cancelled/Rejected', loader: ownerBookingApi.cancelledRejected },
+  { key: 'all', label: 'All', loader: ownerBookingApi.all },
 ];
 
 export default function OwnerBookings() {
@@ -30,7 +30,7 @@ export default function OwnerBookings() {
     tabDef
       .loader()
       .then(({ data }) => setItems(data.results ?? data))
-      .catch((err) => setError(apiErrorMessage(err, 'Не удалось загрузить бронирования.')))
+      .catch((err) => setError(apiErrorMessage(err, 'Failed to load bookings.')))
       .finally(() => setLoading(false));
   };
 
@@ -48,7 +48,7 @@ export default function OwnerBookings() {
       setNotice(doneMsg);
       load();
     } catch (err) {
-      setError(apiErrorMessage(err, 'Действие не выполнено.'));
+      setError(apiErrorMessage(err, 'Action failed.'));
     } finally {
       setBusyUuid('');
     }
@@ -56,8 +56,8 @@ export default function OwnerBookings() {
 
   return (
     <div>
-      <p className="eyebrow">Кабинет владельца</p>
-      <h1>Заявки на бронирование</h1>
+      <p className="eyebrow">Owner Dashboard</p>
+      <h1>Booking Requests</h1>
 
       <div className="tabs">
         {TABS.map((t) => (
@@ -72,7 +72,7 @@ export default function OwnerBookings() {
       {loading && <Spinner />}
 
       {!loading && items && items.length === 0 && (
-        <Empty title="Здесь пока пусто" hint="Заявки на бронирование появятся здесь." />
+        <Empty title="Nothing here yet" hint="Booking requests will appear here." />
       )}
 
       {!loading && items && items.length > 0 && (
@@ -82,25 +82,25 @@ export default function OwnerBookings() {
               <div className="row-main">
                 <span className="row-title">{b.property_title}{b.unit_title ? ` — ${b.unit_title}` : ''}</span>
                 <span className="row-meta">
-                  {b.user?.full_name || b.user?.email} · {b.check_in} → {b.check_out} · {b.number_of_guests} гостей · {b.total_price} €
+                  {b.user?.full_name || b.user?.email} · {b.check_in} → {b.check_out} · {b.number_of_guests} guests · {b.total_price} €
                 </span>
               </div>
               <div className="row-actions">
                 <StatusStamp status={b.status} labels={BOOKING_STATUS_LABELS} />
                 <button className="btn btn-secondary btn-sm" onClick={() => setDetailTarget(b.uuid)}>
-                  Подробнее
+                  Details
                 </button>
                 {b.status === 'pending' && (
                   <>
-                    <button className="btn btn-brass btn-sm" disabled={busyUuid === b.uuid} onClick={() => act(ownerBookingApi.confirm, b.uuid, 'Бронирование подтверждено.')}>
-                      Подтвердить
+                    <button className="btn btn-brass btn-sm" disabled={busyUuid === b.uuid} onClick={() => act(ownerBookingApi.confirm, b.uuid, 'Booking confirmed.')}>
+                      Confirm
                     </button>
-                    <ConfirmButton label="Отклонить" confirmLabel="Точно отклонить?" onConfirm={() => act(ownerBookingApi.reject, b.uuid, 'Бронирование отклонено.')} />
+                    <ConfirmButton label="Reject" confirmLabel="Really reject?" onConfirm={() => act(ownerBookingApi.reject, b.uuid, 'Booking rejected.')} />
                   </>
                 )}
                 {b.status === 'confirmed' && (
-                  <button className="btn btn-secondary btn-sm" disabled={busyUuid === b.uuid} onClick={() => act(ownerBookingApi.complete, b.uuid, 'Бронирование завершено.')}>
-                    Завершить
+                  <button className="btn btn-secondary btn-sm" disabled={busyUuid === b.uuid} onClick={() => act(ownerBookingApi.complete, b.uuid, 'Booking completed.')}>
+                    Complete
                   </button>
                 )}
               </div>
@@ -111,7 +111,7 @@ export default function OwnerBookings() {
 
       {detailTarget && (
         <BookingDetailModal
-          title="Детали заявки"
+          title="Request Details"
           loadDetail={() => ownerBookingApi.detail(detailTarget)}
           onClose={() => setDetailTarget(null)}
           isOwnerView

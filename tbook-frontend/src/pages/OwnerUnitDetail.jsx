@@ -40,7 +40,7 @@ export default function OwnerUnitDetail() {
         });
         setBeds((data.beds || []).map((b) => ({ bed_type: b.bed_type, quantity: b.quantity })));
       })
-      .catch((err) => setError(apiErrorMessage(err, 'Не удалось загрузить юнит.')))
+      .catch((err) => setError(apiErrorMessage(err, 'Failed to load the unit.')))
       .finally(() => setLoading(false));
   };
 
@@ -76,10 +76,10 @@ export default function OwnerUnitDetail() {
         beds: beds.map((b) => ({ bed_type: b.bed_type, quantity: Number(b.quantity) })),
       };
       await unitApi.update(propertyUuid, unitUuid, payload);
-      setNotice('Изменения сохранены.');
+      setNotice('Changes saved.');
       load();
     } catch (err) {
-      setError(apiErrorMessage(err, 'Не удалось сохранить изменения.'));
+      setError(apiErrorMessage(err, 'Failed to save changes.'));
     } finally {
       setSaving(false);
     }
@@ -90,7 +90,7 @@ export default function OwnerUnitDetail() {
       await unitApi.remove(propertyUuid, unitUuid);
       navigate(`/owner/properties/${propertyUuid}`, { replace: true });
     } catch (err) {
-      setError(apiErrorMessage(err, 'Не удалось удалить юнит (возможно, есть активные бронирования).'));
+      setError(apiErrorMessage(err, 'Failed to delete the unit (it may have active bookings).'));
     }
   };
 
@@ -102,7 +102,7 @@ export default function OwnerUnitDetail() {
       await unitImageApi.upload(propertyUuid, unitUuid, files);
       load();
     } catch (err) {
-      setError(apiErrorMessage(err, 'Не удалось загрузить изображения.'));
+      setError(apiErrorMessage(err, 'Failed to upload images.'));
     } finally {
       setUploading(false);
       if (fileInput.current) fileInput.current.value = '';
@@ -114,7 +114,7 @@ export default function OwnerUnitDetail() {
       await unitImageApi.remove(propertyUuid, unitUuid, imageUuid);
       load();
     } catch (err) {
-      setError(apiErrorMessage(err, 'Не удалось удалить изображение.'));
+      setError(apiErrorMessage(err, 'Failed to delete the image.'));
     }
   };
 
@@ -123,47 +123,47 @@ export default function OwnerUnitDetail() {
       await unitImageApi.setCover(propertyUuid, unitUuid, imageUuid);
       load();
     } catch (err) {
-      setError(apiErrorMessage(err, 'Не удалось выбрать обложку.'));
+      setError(apiErrorMessage(err, 'Failed to set the cover image.'));
     }
   };
 
   if (loading) return <Spinner />;
-  if (!unit || !form) return <ErrorBanner message={error || 'Юнит не найден.'} />;
+  if (!unit || !form) return <ErrorBanner message={error || 'Unit not found.'} />;
 
   return (
     <div>
-      <Link to={`/owner/properties/${propertyUuid}`} className="field-hint">← Назад к объекту</Link>
-      <p className="eyebrow" style={{ marginTop: 16 }}>Юнит</p>
-      <h1>{unit.title || 'Без названия'}</h1>
+      <Link to={`/owner/properties/${propertyUuid}`} className="field-hint">← Back to property</Link>
+      <p className="eyebrow" style={{ marginTop: 16 }}>Unit</p>
+      <h1>{unit.title || 'Untitled'}</h1>
       <SuccessBanner message={notice} />
       <ErrorBanner message={error} />
 
       <div className="two-col">
         <div>
-          <h3>Изображения</h3>
+          <h3>Images</h3>
           <div className="gallery" style={{ marginBottom: 12 }}>
             {unit.images?.map((img) => (
               <div className="gallery-item" key={img.uuid}>
                 <img src={img.image} alt="" />
-                {img.is_cover && <span className="cover-badge">Обложка</span>}
+                {img.is_cover && <span className="cover-badge">Cover</span>}
                 <div className="gallery-actions">
-                  {!img.is_cover && <button onClick={() => setCoverImage(img.uuid)}>Обложка</button>}
-                  <button onClick={() => deleteImage(img.uuid)}>Удалить</button>
+                  {!img.is_cover && <button onClick={() => setCoverImage(img.uuid)}>Set as cover</button>}
+                  <button onClick={() => deleteImage(img.uuid)}>Delete</button>
                 </div>
               </div>
             ))}
           </div>
           <input ref={fileInput} type="file" multiple accept="image/jpeg,image/png,image/webp" onChange={uploadImages} disabled={uploading} />
-          {uploading && <p className="field-hint">Загружаем…</p>}
+          {uploading && <p className="field-hint">Uploading…</p>}
 
           <hr className="rule" />
 
-          <h3>Кровати</h3>
+          <h3>Beds</h3>
           <div className="row-list" style={{ marginBottom: 12 }}>
             {beds.map((b, idx) => (
               <div className="field-row" key={idx} style={{ alignItems: 'end' }}>
                 <div className="field">
-                  <label>Тип</label>
+                  <label>Type</label>
                   <select value={b.bed_type} onChange={(e) => updateBed(idx, 'bed_type', e.target.value)}>
                     {BED_TYPES.map((t) => (
                       <option key={t.value} value={t.value}>{t.label}</option>
@@ -172,27 +172,27 @@ export default function OwnerUnitDetail() {
                 </div>
                 <div className="field" style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                   <input type="number" min="1" max="10" style={{ width: 80 }} value={b.quantity} onChange={(e) => updateBed(idx, 'quantity', e.target.value)} />
-                  <button type="button" className="btn btn-secondary btn-sm" onClick={() => removeBed(idx)}>Удалить</button>
+                  <button type="button" className="btn btn-secondary btn-sm" onClick={() => removeBed(idx)}>Delete</button>
                 </div>
               </div>
             ))}
           </div>
-          <button type="button" className="btn btn-secondary btn-sm" onClick={addBed}>+ Добавить кровать</button>
+          <button type="button" className="btn btn-secondary btn-sm" onClick={addBed}>+ Add bed</button>
         </div>
 
         <div>
-          <h3>Параметры юнита</h3>
+          <h3>Unit Details</h3>
           <form onSubmit={save}>
             <div className="field">
-              <label>Название</label>
+              <label>Title</label>
               <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
             </div>
             <div className="field">
-              <label>Описание</label>
+              <label>Description</label>
               <textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
             </div>
             <div className="field">
-              <label>Статус</label>
+              <label>Status</label>
               <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}>
                 {UNIT_STATUSES.map((s) => (
                   <option key={s.value} value={s.value}>{s.label}</option>
@@ -201,37 +201,37 @@ export default function OwnerUnitDetail() {
             </div>
             <div className="field-row">
               <div className="field">
-                <label>Цена/ночь</label>
+                <label>Price/night</label>
                 <input type="number" step="0.01" required value={form.price_per_night} onChange={(e) => setForm({ ...form, price_per_night: e.target.value })} />
               </div>
               <div className="field">
-                <label>Площадь, м²</label>
+                <label>Area, m²</label>
                 <input type="number" required value={form.area} onChange={(e) => setForm({ ...form, area: e.target.value })} />
               </div>
             </div>
             <div className="field-row">
               <div className="field">
-                <label>Спальни</label>
+                <label>Bedrooms</label>
                 <input type="number" required value={form.bedrooms} onChange={(e) => setForm({ ...form, bedrooms: e.target.value })} />
               </div>
               <div className="field">
-                <label>Ванные</label>
+                <label>Bathrooms</label>
                 <input type="number" required value={form.bathrooms} onChange={(e) => setForm({ ...form, bathrooms: e.target.value })} />
               </div>
             </div>
             <div className="field-row">
               <div className="field">
-                <label>Гостей макс.</label>
+                <label>Max guests</label>
                 <input type="number" required value={form.max_guests} onChange={(e) => setForm({ ...form, max_guests: e.target.value })} />
               </div>
               <div className="field">
-                <label>№ комнаты</label>
+                <label>Room #</label>
                 <input value={form.room_number} onChange={(e) => setForm({ ...form, room_number: e.target.value })} />
               </div>
             </div>
             {amenities.length > 0 && (
               <div className="field">
-                <label>Удобства</label>
+                <label>Amenities</label>
                 <div className="checkbox-grid">
                   {amenities.map((a) => (
                     <span key={a.uuid} className={`chip${form.amenities.includes(a.uuid) ? ' selected' : ''}`} onClick={() => toggleAmenity(a.uuid)}>
@@ -243,9 +243,9 @@ export default function OwnerUnitDetail() {
             )}
             <div className="btn-row">
               <button className="btn" disabled={saving}>
-                {saving ? 'Сохраняем…' : 'Сохранить изменения'}
+                {saving ? 'Saving…' : 'Save Changes'}
               </button>
-              <ConfirmButton label="Удалить юнит" confirmLabel="Точно удалить?" onConfirm={deleteUnit} className="btn btn-danger" />
+              <ConfirmButton label="Delete Unit" confirmLabel="Really delete?" onConfirm={deleteUnit} className="btn btn-danger" />
             </div>
           </form>
         </div>

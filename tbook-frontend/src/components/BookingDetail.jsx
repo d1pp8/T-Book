@@ -18,7 +18,7 @@ export default function BookingDetailModal({ title, loadDetail, onClose, isOwner
     setError('');
     loadDetail()
       .then(({ data }) => !cancelled && setData(data))
-      .catch((err) => !cancelled && setError(apiErrorMessage(err, 'Не удалось загрузить бронирование.')))
+      .catch((err) => !cancelled && setError(apiErrorMessage(err, 'Failed to load the booking.')))
       .finally(() => !cancelled && setLoading(false));
     return () => {
       cancelled = true;
@@ -27,7 +27,7 @@ export default function BookingDetailModal({ title, loadDetail, onClose, isOwner
   }, []);
 
   return (
-    <Modal title={title || 'Бронирование'} onClose={onClose}>
+    <Modal title={title || 'Booking'} onClose={onClose}>
       <ErrorBanner message={error} />
       {loading && <Spinner />}
 
@@ -48,41 +48,41 @@ export default function BookingDetailModal({ title, loadDetail, onClose, isOwner
 
           {data.unit && (
             <div className="field-hint">
-              Номер/юнит: <strong>{data.unit.title || 'Без названия'}</strong>
+              Unit: <strong>{data.unit.title || 'Untitled'}</strong>
               {data.unit.room_number ? ` (№${data.unit.room_number})` : ''}
             </div>
           )}
 
           {isOwnerView && data.user && (
             <div className="field-hint">
-              Гость: <strong>{data.user.full_name || data.user.email}</strong>
+              Guest: <strong>{data.user.full_name || data.user.email}</strong>
               {data.user.email ? ` · ${data.user.email}` : ''}
               {data.user.phone ? ` · ${data.user.phone}` : ''}
             </div>
           )}
 
           <div className="field-row">
-            <div className="field-hint">Заезд: <strong>{data.check_in}</strong></div>
-            <div className="field-hint">Выезд: <strong>{data.check_out}</strong></div>
+            <div className="field-hint">Check-in: <strong>{data.check_in}</strong></div>
+            <div className="field-hint">Check-out: <strong>{data.check_out}</strong></div>
           </div>
           <div className="field-row">
-            <div className="field-hint">Ночей: <strong>{data.duration}</strong></div>
-            <div className="field-hint">Гостей: <strong>{data.adults} взр. {data.children ? `+ ${data.children} дет.` : ''}</strong></div>
+            <div className="field-hint">Nights: <strong>{data.duration}</strong></div>
+            <div className="field-hint">Guests: <strong>{data.adults} adults {data.children ? `+ ${data.children} children` : ''}</strong></div>
           </div>
           <div className="field-row">
-            <div className="field-hint">Цена/ночь: <strong>{data.price_per_night} €</strong></div>
-            <div className="field-hint">Итого: <strong>{data.total_price} €</strong></div>
+            <div className="field-hint">Price/night: <strong>{data.price_per_night} €</strong></div>
+            <div className="field-hint">Total: <strong>{data.total_price} €</strong></div>
           </div>
 
           {data.special_request && (
             <div>
-              <div className="field-hint" style={{ marginBottom: 4 }}>Пожелания гостя:</div>
+              <div className="field-hint" style={{ marginBottom: 4 }}>Guest's requests:</div>
               <p className="body-text" style={{ marginTop: 0 }}>{data.special_request}</p>
             </div>
           )}
 
           <div className="field-hint">
-            {String(data.can_cancel) === 'true' ? 'Бронирование ещё можно отменить.' : 'Отмена бронирования больше недоступна.'}
+            {String(data.can_cancel) === 'true' ? 'This booking can still be cancelled.' : 'Cancellation is no longer available for this booking.'}
           </div>
         </div>
       )}

@@ -7,10 +7,10 @@ import { BOOKING_STATUS_LABELS } from '../constants';
 import { StarIcon, PencilIcon, TrashIcon } from '../components/Icons';
 
 const TABS = [
-  { key: 'active', label: 'Активные', loader: bookingApi.active },
-  { key: 'completed', label: 'Завершённые', loader: bookingApi.completed },
-  { key: 'cancelled', label: 'Отменённые/отклонённые', loader: bookingApi.cancelledRejected },
-  { key: 'all', label: 'Все', loader: bookingApi.all },
+  { key: 'active', label: 'Active', loader: bookingApi.active },
+  { key: 'completed', label: 'Completed', loader: bookingApi.completed },
+  { key: 'cancelled', label: 'Cancelled/Rejected', loader: bookingApi.cancelledRejected },
+  { key: 'all', label: 'All', loader: bookingApi.all },
 ];
 
 export default function GuestBookings() {
@@ -18,15 +18,15 @@ export default function GuestBookings() {
 
   return (
     <div>
-      <p className="eyebrow">Личный кабинет</p>
-      <h1>{section === 'bookings' ? 'Мои бронирования' : 'Мои отзывы'}</h1>
+      <p className="eyebrow">My Account</p>
+      <h1>{section === 'bookings' ? 'My Bookings' : 'My Reviews'}</h1>
 
       <div className="tabs">
         <button className={`tab${section === 'bookings' ? ' active' : ''}`} onClick={() => setSection('bookings')}>
-          Бронирования
+          Bookings
         </button>
         <button className={`tab${section === 'reviews' ? ' active' : ''}`} onClick={() => setSection('reviews')}>
-          Отзывы
+          Reviews
         </button>
       </div>
 
@@ -51,7 +51,7 @@ function BookingsSection() {
     tabDef
       .loader()
       .then(({ data }) => setItems(data.results ?? data))
-      .catch((err) => setError(apiErrorMessage(err, 'Не удалось загрузить бронирования.')))
+      .catch((err) => setError(apiErrorMessage(err, 'Failed to load bookings.')))
       .finally(() => setLoading(false));
   };
 
@@ -64,10 +64,10 @@ function BookingsSection() {
     setNotice('');
     try {
       await bookingApi.cancel(uuid);
-      setNotice('Бронирование отменено.');
+      setNotice('Booking cancelled.');
       load();
     } catch (err) {
-      setError(apiErrorMessage(err, 'Не удалось отменить бронирование.'));
+      setError(apiErrorMessage(err, 'Failed to cancel the booking.'));
     }
   };
 
@@ -86,7 +86,7 @@ function BookingsSection() {
       {loading && <Spinner />}
 
       {!loading && items && items.length === 0 && (
-        <Empty title="Здесь пока пусто" hint="Забронируйте жильё в каталоге, чтобы увидеть его тут." />
+        <Empty title="Nothing here yet" hint="Book a place in the catalog to see it here." />
       )}
 
       {!loading && items && items.length > 0 && (
@@ -96,20 +96,20 @@ function BookingsSection() {
               <div className="row-main">
                 <span className="row-title">{b.property_title}{b.unit_title ? ` — ${b.unit_title}` : ''}</span>
                 <span className="row-meta">
-                  {b.check_in} → {b.check_out} · {b.number_of_guests} гостей · {b.total_price} €
+                  {b.check_in} → {b.check_out} · {b.number_of_guests} guests · {b.total_price} €
                 </span>
               </div>
               <div className="row-actions">
                 <StatusStamp status={b.status} labels={BOOKING_STATUS_LABELS} />
                 <button className="btn btn-secondary btn-sm" onClick={() => setDetailTarget(b.uuid)}>
-                  Подробнее
+                  Details
                 </button>
                 {b.status === 'pending' || b.status === 'confirmed' ? (
-                  <ConfirmButton label="Отменить" confirmLabel="Отменить бронь?" onConfirm={() => cancelBooking(b.uuid)} />
+                  <ConfirmButton label="Cancel" confirmLabel="Cancel booking?" onConfirm={() => cancelBooking(b.uuid)} />
                 ) : null}
                 {b.status === 'completed' && (
                   <button className="btn btn-secondary btn-sm" onClick={() => setReviewTarget(b)}>
-                    Оставить отзыв
+                    Leave a review
                   </button>
                 )}
               </div>
@@ -122,13 +122,13 @@ function BookingsSection() {
         <ReviewModal
           booking={reviewTarget}
           onClose={() => setReviewTarget(null)}
-          onDone={() => { setReviewTarget(null); setNotice('Спасибо за отзыв!'); }}
+          onDone={() => { setReviewTarget(null); setNotice('Thank you for your review!'); }}
         />
       )}
 
       {detailTarget && (
         <BookingDetailModal
-          title="Детали бронирования"
+          title="Booking Details"
           loadDetail={() => bookingApi.detail(detailTarget)}
           onClose={() => setDetailTarget(null)}
         />
@@ -150,7 +150,7 @@ function MyReviewsSection() {
     reviewApi
       .list()
       .then(({ data }) => setItems(data.results ?? data))
-      .catch((err) => setError(apiErrorMessage(err, 'Не удалось загрузить отзывы.')))
+      .catch((err) => setError(apiErrorMessage(err, 'Failed to load reviews.')))
       .finally(() => setLoading(false));
   };
 
@@ -162,17 +162,17 @@ function MyReviewsSection() {
     setNotice('');
     try {
       await reviewApi.remove(uuid);
-      setNotice('Отзыв удалён.');
+      setNotice('Review deleted.');
       load();
     } catch (err) {
-      setError(apiErrorMessage(err, 'Не удалось удалить отзыв.'));
+      setError(apiErrorMessage(err, 'Failed to delete the review.'));
     }
   };
 
   return (
     <div>
       <p className="field-hint" style={{ marginTop: -18, marginBottom: 20 }}>
-        Здесь можно отредактировать оценку и текст, или удалить свой отзыв.
+        Here you can edit the rating and text, or delete your review.
       </p>
 
       <ErrorBanner message={error} />
@@ -180,7 +180,7 @@ function MyReviewsSection() {
       {loading && <Spinner />}
 
       {!loading && items && items.length === 0 && (
-        <Empty title="Пока нет отзывов" hint="Оставьте отзыв о завершённом проживании во вкладке «Бронирования»." />
+        <Empty title="No reviews yet" hint="Leave a review for a completed stay in the \"Bookings\" tab." />
       )}
 
       {!loading && items && items.length > 0 && (
@@ -190,19 +190,19 @@ function MyReviewsSection() {
               <div className="my-review-head">
                 <div>
                   <div className="row-title">{r.property_title}</div>
-                  <div className="field-hint">{new Date(r.created_at).toLocaleDateString('ru-RU')}</div>
+                  <div className="field-hint">{new Date(r.created_at).toLocaleDateString('en-US')}</div>
                 </div>
                 <div className="row-actions">
                   <span className="review-rating">
                     <StarIcon />
                     <span>{r.rating}/10</span>
                   </span>
-                  <button className="icon-btn" aria-label="Редактировать отзыв" onClick={() => setEditTarget(r)}>
+                  <button className="icon-btn" aria-label="Edit review" onClick={() => setEditTarget(r)}>
                     <PencilIcon />
                   </button>
                   <ConfirmButton
                     label={<TrashIcon />}
-                    confirmLabel="Удалить?"
+                    confirmLabel="Delete?"
                     onConfirm={() => removeReview(r.uuid)}
                     className="icon-btn danger"
                   />
@@ -218,7 +218,7 @@ function MyReviewsSection() {
         <ReviewModal
           review={editTarget}
           onClose={() => setEditTarget(null)}
-          onDone={() => { setEditTarget(null); setNotice('Отзыв обновлён.'); load(); }}
+          onDone={() => { setEditTarget(null); setNotice('Review updated.'); load(); }}
         />
       )}
     </div>
@@ -246,32 +246,32 @@ function ReviewModal({ booking, review, onClose, onDone }) {
       }
       onDone();
     } catch (err) {
-      setError(apiErrorMessage(err, 'Не удалось сохранить отзыв.'));
+      setError(apiErrorMessage(err, 'Failed to save the review.'));
     } finally {
       setBusy(false);
     }
   };
 
-  const title = isEdit ? `Редактирование отзыва о «${review.property_title}»` : `Отзыв о «${booking.property_title}»`;
+  const title = isEdit ? `Editing review for "${review.property_title}"` : `Review for "${booking.property_title}"`;
 
   return (
     <Modal title={title} onClose={onClose}>
       <ErrorBanner message={error} />
       <form onSubmit={submit}>
         <div className="field">
-          <label>Оценка (1–10)</label>
+          <label>Rating (1–10)</label>
           <input type="number" min="1" max="10" required value={rating} onChange={(e) => setRating(e.target.value)} />
         </div>
         <div className="field">
-          <label>Комментарий</label>
+          <label>Comment</label>
           <textarea rows={4} value={comment} onChange={(e) => setComment(e.target.value)} />
         </div>
         <div className="btn-row">
           <button className="btn btn-brass" disabled={busy}>
-            {busy ? 'Сохраняем…' : isEdit ? 'Сохранить изменения' : 'Отправить отзыв'}
+            {busy ? 'Saving…' : isEdit ? 'Save Changes' : 'Submit Review'}
           </button>
           <button type="button" className="btn btn-secondary" onClick={onClose}>
-            Отмена
+            Cancel
           </button>
         </div>
       </form>

@@ -31,7 +31,7 @@ export default function Profile() {
     try {
       await authApi.updateProfile(form);
       await refreshUser();
-      setSaveMsg('Профиль обновлён.');
+      setSaveMsg('Profile updated.');
     } catch (err) {
       setSaveErr(apiErrorMessage(err));
     } finally {
@@ -46,7 +46,7 @@ export default function Profile() {
     setPwdBusy(true);
     try {
       await authApi.changePassword(pwd);
-      setPwdMsg('Пароль изменён.');
+      setPwdMsg('Password changed.');
       setPwd({ old_password: '', new_password: '', new_password2: '' });
     } catch (err) {
       setPwdErr(apiErrorMessage(err));
@@ -57,42 +57,42 @@ export default function Profile() {
 
   return (
     <div style={{ maxWidth: 520 }}>
-      <p className="eyebrow">Профиль</p>
+      <p className="eyebrow">Profile</p>
       <h1>{user.email}</h1>
-      <p className="subtitle">Роль: {ROLE_LABELS[user.role] || user.role}</p>
+      <p className="subtitle">Role: {ROLE_LABELS[user.role] || user.role}</p>
 
       <div className="card card-pad" style={{ marginBottom: 24 }}>
-        <h3>Личные данные</h3>
+        <h3>Personal Information</h3>
         <ErrorBanner message={saveErr} />
         <SuccessBanner message={saveMsg} />
         <form onSubmit={saveProfile}>
           <div className="field-row">
             <div className="field">
-              <label>Имя</label>
+              <label>First name</label>
               <input value={form.first_name} onChange={(e) => setForm({ ...form, first_name: e.target.value })} />
             </div>
             <div className="field">
-              <label>Фамилия</label>
+              <label>Last name</label>
               <input value={form.last_name} onChange={(e) => setForm({ ...form, last_name: e.target.value })} />
             </div>
           </div>
           <div className="field">
-            <label>Телефон</label>
+            <label>Phone</label>
             <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
           </div>
           <button className="btn" disabled={busy}>
-            {busy ? 'Сохраняем…' : 'Сохранить'}
+            {busy ? 'Saving…' : 'Save'}
           </button>
         </form>
       </div>
 
       <div className="card card-pad">
-        <h3>Смена пароля</h3>
+        <h3>Change Password</h3>
         <ErrorBanner message={pwdErr} />
         <SuccessBanner message={pwdMsg} />
         <form onSubmit={changePassword}>
           <div className="field">
-            <label>Текущий пароль</label>
+            <label>Current password</label>
             <input
               type="password"
               required
@@ -102,7 +102,7 @@ export default function Profile() {
           </div>
           <div className="field-row">
             <div className="field">
-              <label>Новый пароль</label>
+              <label>New password</label>
               <input
                 type="password"
                 required
@@ -111,7 +111,7 @@ export default function Profile() {
               />
             </div>
             <div className="field">
-              <label>Повторите новый пароль</label>
+              <label>Confirm new password</label>
               <input
                 type="password"
                 required
@@ -121,7 +121,7 @@ export default function Profile() {
             </div>
           </div>
           <button className="btn btn-secondary" disabled={pwdBusy}>
-            {pwdBusy ? 'Меняем…' : 'Изменить пароль'}
+            {pwdBusy ? 'Changing…' : 'Change Password'}
           </button>
         </form>
       </div>

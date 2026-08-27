@@ -18,8 +18,8 @@ export function RequireOwner({ children }) {
   if (!isOwner) {
     return (
       <div className="empty">
-        <h3>Доступно только владельцам</h3>
-        <p>Эта страница открыта пользователям с ролью «Владелец» или «Администратор».</p>
+        <h3>Available to owners only</h3>
+        <p>This page is open to users with the "Owner" or "Administrator" role.</p>
       </div>
     );
   }

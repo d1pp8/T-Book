@@ -60,7 +60,7 @@ export default function ListingDetail() {
         const idx = data.categories?.findIndex((c) => c.unit_uuid === firstUnit);
         setUnitIndex(idx > 0 ? idx : 0);
       })
-      .catch((err) => !cancelled && setError(apiErrorMessage(err, 'Объект не найден.')))
+      .catch((err) => !cancelled && setError(apiErrorMessage(err, 'Property not found.')))
       .finally(() => !cancelled && setLoading(false));
     return () => {
       cancelled = true;
@@ -101,16 +101,16 @@ export default function ListingDetail() {
       return;
     }
     if (!selectedUnit) {
-      setBookingError('Выберите номер/юнит для бронирования.');
+      setBookingError('Select a room/unit to book.');
       return;
     }
     setBookingBusy(true);
     try {
       await bookingApi.create({ unit: selectedUnit, ...form });
-      setBookingSuccess('Бронирование создано и ожидает подтверждения владельца.');
+      setBookingSuccess('Booking created and awaiting owner confirmation.');
       setForm({ check_in: '', check_out: '', adults: 1, children: 0, special_request: '' });
     } catch (err) {
-      setBookingError(apiErrorMessage(err, 'Не удалось создать бронирование.'));
+      setBookingError(apiErrorMessage(err, 'Failed to create the booking.'));
     } finally {
       setBookingBusy(false);
     }
@@ -145,7 +145,7 @@ export default function ListingDetail() {
                   key={src + i}
                   className={`hero-thumb${i === heroIndex ? ' active' : ''}`}
                   onClick={() => setHeroIndex(i)}
-                  aria-label={`Фото ${i + 1}`}
+                  aria-label={`Photo ${i + 1}`}
                 >
                   <img src={src} alt="" />
                 </button>
@@ -158,7 +158,7 @@ export default function ListingDetail() {
           <div className="hero-info-row">
             <span className="avatar-circle">{initials(listing.owner?.name)}</span>
             <div>
-              <div className="hero-info-label">Владелец</div>
+              <div className="hero-info-label">Owner</div>
               <div className="hero-info-value">{listing.owner?.name}</div>
             </div>
           </div>
@@ -168,7 +168,7 @@ export default function ListingDetail() {
               <PinIcon size={15} />
             </span>
             <div>
-              <div className="hero-info-label">Адрес</div>
+              <div className="hero-info-label">Address</div>
               <div className="hero-info-value">
                 {listing.address?.city}, {listing.address?.street} {listing.address?.house_number}
               </div>
@@ -178,7 +178,7 @@ export default function ListingDetail() {
           {listing.amenities?.length > 0 && (
             <div className="hero-amenities">
               <div className="hero-info-label" style={{ marginBottom: 8 }}>
-                Удобства
+                Amenities
               </div>
               <div className="amenity-icon-row">
                 {listing.amenities.map((a) => (
@@ -198,7 +198,7 @@ export default function ListingDetail() {
           <p className="body-text">{listing.description}</p>
         </div>
         <a href="#book" className="btn btn-brass hero-book-btn">
-          Забронировать
+          Book Now
         </a>
       </div>
 
@@ -207,31 +207,31 @@ export default function ListingDetail() {
       {/* ---------- Single-unit facts (apartment / villa / house — no room categories) ---------- */}
       {isSingleUnit && (
         <>
-          <h2>Параметры жилья</h2>
+          <h2>Property Details</h2>
           <div className="unit-summary-row" style={{ marginBottom: 18 }}>
             <div className="single-unit-facts">
               {listing.area != null && (
                 <div className="unit-fact">
                   <AreaIcon size={15} />
-                  <span>{listing.area} м²</span>
+                  <span>{listing.area} m²</span>
                 </div>
               )}
               {listing.bedrooms != null && (
                 <div className="unit-fact">
                   <BedIcon size={15} />
-                  <span>{listing.bedrooms} спальни</span>
+                  <span>{listing.bedrooms} bedrooms</span>
                 </div>
               )}
               {listing.bathrooms != null && (
                 <div className="unit-fact">
                   <BathIcon size={15} />
-                  <span>{listing.bathrooms} санузла</span>
+                  <span>{listing.bathrooms} bathrooms</span>
                 </div>
               )}
               {listing.max_guests != null && (
                 <div className="unit-fact">
                   <UsersIcon size={15} />
-                  <span>до {listing.max_guests} гостей</span>
+                  <span>up to {listing.max_guests} guests</span>
                 </div>
               )}
               {listing.beds?.length > 0 && (
@@ -244,11 +244,11 @@ export default function ListingDetail() {
             <div className="unit-summary-actions">
               {listing.price_per_night != null && (
                 <span className="price price-lg">
-                  {listing.price_per_night} €<span className="price-label"> / ночь</span>
+                  {listing.price_per_night} €<span className="price-label"> / night</span>
                 </span>
               )}
               <a href="#book" className="btn btn-brass">
-                Забронировать
+                Book Now
               </a>
             </div>
           </div>
@@ -259,15 +259,15 @@ export default function ListingDetail() {
       {/* ---------- Room categories browser ---------- */}
       {categories.length > 0 && (
         <>
-          <h2>Номера</h2>
+          <h2>Rooms</h2>
           <div className="unit-browser">
-            <button className="unit-nav-btn" onClick={() => goUnit(-1)} disabled={categories.length < 2} aria-label="Предыдущий номер">
+            <button className="unit-nav-btn" onClick={() => goUnit(-1)} disabled={categories.length < 2} aria-label="Previous room">
               <ChevronLeftIcon />
             </button>
 
             <div className="unit-browser-body">
               <div className="unit-gallery">
-                <button className="unit-image-arrow left" onClick={() => goUnitImage(-1)} disabled={(activeUnit?.gallery?.length || 0) < 2} aria-label="Предыдущее фото">
+                <button className="unit-image-arrow left" onClick={() => goUnitImage(-1)} disabled={(activeUnit?.gallery?.length || 0) < 2} aria-label="Previous photo">
                   <ChevronLeftIcon size={16} />
                 </button>
                 <div className="unit-gallery-main">
@@ -281,7 +281,7 @@ export default function ListingDetail() {
                     <span>{activeUnit?.guests_to}</span>
                   </div>
                 </div>
-                <button className="unit-image-arrow right" onClick={() => goUnitImage(1)} disabled={(activeUnit?.gallery?.length || 0) < 2} aria-label="Следующее фото">
+                <button className="unit-image-arrow right" onClick={() => goUnitImage(1)} disabled={(activeUnit?.gallery?.length || 0) < 2} aria-label="Next photo">
                   <ChevronRightIcon size={16} />
                 </button>
                 {activeUnit?.gallery?.length > 1 && (
@@ -309,13 +309,13 @@ export default function ListingDetail() {
                 <div className="unit-fact">
                   <AreaIcon size={15} />
                   <span>
-                    {activeUnit?.area_from}–{activeUnit?.area_to} м²
+                    {activeUnit?.area_from}–{activeUnit?.area_to} m²
                   </span>
                 </div>
                 <div className="unit-fact">
                   <UsersIcon size={15} />
                   <span>
-                    {activeUnit?.guests_from}–{activeUnit?.guests_to} гостей
+                    {activeUnit?.guests_from}–{activeUnit?.guests_to} guests
                   </span>
                 </div>
                 {activeUnit?.amenities?.length > 0 && (
@@ -327,11 +327,11 @@ export default function ListingDetail() {
                     ))}
                   </div>
                 )}
-                <div className="unit-fact-hint">Доступно: {activeUnit?.units_available}</div>
+                <div className="unit-fact-hint">Available: {activeUnit?.units_available}</div>
               </div>
             </div>
 
-            <button className="unit-nav-btn" onClick={() => goUnit(1)} disabled={categories.length < 2} aria-label="Следующий номер">
+            <button className="unit-nav-btn" onClick={() => goUnit(1)} disabled={categories.length < 2} aria-label="Next room">
               <ChevronRightIcon />
             </button>
           </div>
@@ -345,13 +345,13 @@ export default function ListingDetail() {
             </div>
             <div className="unit-summary-actions">
               <span className="price price-lg">
-                {activeUnit?.price_from}–{activeUnit?.price_to} €<span className="price-label"> / ночь</span>
+                {activeUnit?.price_from}–{activeUnit?.price_to} €<span className="price-label"> / night</span>
               </span>
               <button
                 className={`btn ${selectedUnit === activeUnit?.unit_uuid ? 'btn-brass' : 'btn-secondary'}`}
                 onClick={() => activeUnit && pickUnit(activeUnit)}
               >
-                Забронировать
+                Book Now
               </button>
             </div>
           </div>
@@ -376,9 +376,9 @@ export default function ListingDetail() {
       {/* ---------- Reviews + booking form ---------- */}
       <div className="two-col">
         <div>
-          <h2>Отзывы</h2>
+          <h2>Reviews</h2>
           <p className="field-hint" style={{ marginTop: -8, marginBottom: 20 }}>
-            Оставить отзыв можно только после успешного проживания — в течение 3 дней после выезда.
+            You can leave a review only after a successful stay — within 3 days of checkout.
           </p>
 
           {listing.reviews?.length ? (
@@ -389,7 +389,7 @@ export default function ListingDetail() {
                     <span className="avatar-circle">{initials(r.user)}</span>
                     <div className="review-head-meta">
                       <div className="row-title">{r.user}</div>
-                      <div className="field-hint">{new Date(r.created_at).toLocaleDateString('ru-RU')}</div>
+                      <div className="field-hint">{new Date(r.created_at).toLocaleDateString('en-US')}</div>
                     </div>
                     <div className="review-rating">
                       <StarIcon />
@@ -398,10 +398,10 @@ export default function ListingDetail() {
                   </div>
                   <p className="review-text">{r.comment}</p>
                   <div className="review-foot">
-                    <button className="review-vote" aria-label="Полезно">
+                    <button className="review-vote" aria-label="Helpful">
                       <ThumbUpIcon />
                     </button>
-                    <button className="review-vote" aria-label="Не полезно">
+                    <button className="review-vote" aria-label="Not helpful">
                       <ThumbDownIcon />
                     </button>
                   </div>
@@ -409,15 +409,15 @@ export default function ListingDetail() {
               ))}
             </div>
           ) : (
-            <p className="field-hint">Пока нет отзывов.</p>
+            <p className="field-hint">No reviews yet.</p>
           )}
         </div>
 
         <div className="card card-pad side-card" id="book">
-          <h3>Забронировать</h3>
+          <h3>Book Now</h3>
           {activeUnit && (
             <p className="field-hint" style={{ marginTop: -8 }}>
-              Номер: <strong>{categories.find((c) => c.unit_uuid === selectedUnit)?.title || activeUnit.title}</strong>
+              Room: <strong>{categories.find((c) => c.unit_uuid === selectedUnit)?.title || activeUnit.title}</strong>
             </p>
           )}
           <ErrorBanner message={bookingError} />
@@ -425,11 +425,11 @@ export default function ListingDetail() {
           <form onSubmit={submitBooking}>
             {categories.length > 1 && (
               <div className="field">
-                <label>Номер</label>
+                <label>Room</label>
                 <select value={selectedUnit} onChange={(e) => setSelectedUnit(e.target.value)}>
                   {categories.map((c) => (
                     <option key={c.unit_uuid} value={c.unit_uuid}>
-                      {c.title} — {c.price_from}–{c.price_to} €/ночь
+                      {c.title} — {c.price_from}–{c.price_to} €/night
                     </option>
                   ))}
                 </select>
@@ -437,30 +437,30 @@ export default function ListingDetail() {
             )}
             <div className="field-row">
               <div className="field">
-                <label>Заезд</label>
+                <label>Check-in</label>
                 <input type="date" required value={form.check_in} onChange={(e) => setForm({ ...form, check_in: e.target.value })} />
               </div>
               <div className="field">
-                <label>Выезд</label>
+                <label>Check-out</label>
                 <input type="date" required value={form.check_out} onChange={(e) => setForm({ ...form, check_out: e.target.value })} />
               </div>
             </div>
             <div className="field-row">
               <div className="field">
-                <label>Взрослые</label>
+                <label>Adults</label>
                 <input type="number" min="1" required value={form.adults} onChange={(e) => setForm({ ...form, adults: e.target.value })} />
               </div>
               <div className="field">
-                <label>Дети</label>
+                <label>Children</label>
                 <input type="number" min="0" value={form.children} onChange={(e) => setForm({ ...form, children: e.target.value })} />
               </div>
             </div>
             <div className="field">
-              <label>Пожелания (необязательно)</label>
+              <label>Special requests (optional)</label>
               <textarea rows={3} value={form.special_request} onChange={(e) => setForm({ ...form, special_request: e.target.value })} />
             </div>
             <button className="btn btn-brass" style={{ width: '100%' }} disabled={bookingBusy}>
-              {bookingBusy ? 'Отправляем…' : isAuthenticated ? 'Забронировать' : 'Войдите, чтобы забронировать'}
+              {bookingBusy ? 'Submitting…' : isAuthenticated ? 'Book Now' : 'Log in to book'}
             </button>
           </form>
         </div>
